@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+                                              xmlns:app="http://schemas.android.com/apk/res-auto"
+                                              android:layout_width="match_parent"
+                                              android:layout_height="120dp"
+                                              app:cardBackgroundColor="@android:color/white"
+                                              app:cardElevation="2dp"
+                                              app:cardPreventCornerOverlap="true">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent"
+                  android:orientation="horizontal"
+                  android:background="@drawable/shape"
+                  android:id="@+id/my_pawned_llayout">
+        <View
+                android:layout_width="8dp"
+                android:layout_height="fill_parent"
+                android:background="@color/colorPrimaryDark" android:id="@+id/item_ribbon"/>
+        <ImageView android:layout_width="120dp" android:layout_height="120dp"
+                   android:padding="10dp"
+                   android:src="@drawable/ring" android:layout_marginLeft="10dp" android:id="@+id/product_image"/>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent"
+                      android:orientation="vertical"
+        >
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:paddingBottom="5dp"
+                      android:textSize="18sp"
+                      android:maxLines="3"
+                      android:ellipsize="end"
+                      android:paddingHorizontal="5dp"
+                      android:id="@+id/product_name"
+                      android:text="You posted a Diamond Ring " android:textColor="@color/colorDGray"
+                      android:paddingTop="10dp"/>
+
+            <TextView
+                    android:id="@+id/pawned_date_posted"
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:paddingHorizontal="5dp"
+                    android:layout_marginTop="5dp"
+                    android:maxLines="3"
+                    android:ellipsize="end"
+                    android:text="Posted on 11/22/17" android:textColor="@color/colorGray"
+                    android:textSize="16sp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+</android.support.design.card.MaterialCardView>

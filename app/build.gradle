@@ -1,0 +1,82 @@
+apply plugin: 'com.android.application'
+
+buildscript {
+
+    ext.compile_sdk_version = 28
+    ext.min_sdk_version = 16
+    ext.target_sdk_version = 28
+    ext.support_version = '28.0.0'
+    ext.glide_version = '4.9.0'
+    ext.glide_slider_version = '1.4.1'
+
+    // use this config if you want to load svg
+    //ext.glide_slider_version = '1.3.1'
+    //ext.androidsvg_version = '1.2.1'
+
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.4.2'
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        mavenCentral()
+        maven { url "https://jitpack.io" }
+
+    }
+}
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        vectorDrawables.useSupportLibrary = true
+        applicationId "com.example.systemscoreinc.repawn"
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    dataBinding {
+        enabled = true
+    }
+}
+
+dependencies {
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.google.android.gms:play-services-maps:16.1.0'
+    implementation 'net.gotev:uploadservice:2.1'
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
+    implementation "com.github.firdausmaulan:GlideSlider:1.4.1"
+    implementation 'joda-time:joda-time:2.10.3'
+    implementation 'com.github.smarteist:autoimageslider:1.3.2'
+    implementation 'com.valdesekamdem.library:md-toast:0.9.0'
+    implementation 'com.android.support:design:28.0.0'
+    implementation 'com.paypal.sdk:paypal-android-sdk:2.16.0'
+    implementation 'com.android.support:support-v4:28.0.0'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    testImplementation 'junit:junit:4.12'
+    implementation 'de.hdodenhof:circleimageview:3.0.0'
+    implementation 'org.ocpsoft.prettytime:prettytime:4.0.1.Final'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    api 'com.android.volley:volley:1.1.1'
+    api 'com.android.support:cardview-v7:28.0.0'
+    implementation 'com.android.support:recyclerview-v7:28.0.0'
+}

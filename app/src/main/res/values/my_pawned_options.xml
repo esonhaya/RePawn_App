@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="my_pawned_options_all">
+        <item>Edit</item>
+        <item>Delete</item>
+        <item>Promote</item>
+    </string-array>
+    <string-array name="my_pawned_options_promoted">
+        <item>Edit</item>
+        <item>Delete</item>
+    </string-array>
+</resources>

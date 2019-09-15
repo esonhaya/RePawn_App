@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                 xmlns:tools="http://schemas.android.com/tools"
+                                                 android:layout_width="match_parent"
+                                                 android:layout_height="match_parent"
+                                                 tools:context=".Profile_Related.EditProfile"
+>
+
+    <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:popupTheme="@style/AppTheme.NoActionBar">
+
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="70dp"
+            tools:context=".Login_and_Before.Register">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+        >
+            <de.hdodenhof.circleimageview.CircleImageView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/profile_image"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:src="@drawable/shaggy"
+                    app:civ_border_width="2dp"
+                    app:civ_border_color="#FF000000"
+                    android:layout_gravity="center"/>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                          android:layout_margin="10dp"
+                          android:background="@drawable/shape_others"
+                          android:orientation="vertical" android:id="@+id/edit_layout">
+
+                <android.support.design.widget.TextInputLayout
+                        android:id="@+id/edit_fname_text_input"
+                        android:theme="@style/TIL"
+                        android:paddingTop="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/shr_hint_fname" android:textColorHint="@color/colorPrimary">
+
+
+                    <android.support.design.widget.TextInputEditText
+                            android:id="@+id/edit_fname_text_edit"
+                            android:theme="@style/TIL"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="text"
+                            android:maxLines="1"
+                            android:textColor="@color/colorPrimary"/>
+                </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputLayout
+                        android:id="@+id/edit_lname_text_input"
+                        android:theme="@style/TIL"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/shr_hint_lname"
+
+                        android:textColorHint="@color/colorPrimary">
+                    <android.support.design.widget.TextInputEditText
+                            android:id="@+id/edit_lname_text_edit"
+                            android:layout_width="match_parent"
+                            android:theme="@style/TIL"
+                            android:layout_height="wrap_content"
+                            android:inputType="text"
+                            android:maxLines="1" android:textColor="@color/colorPrimary"
+                            android:textColorHint="@color/colorPrimary"/>
+                </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputLayout
+                        android:id="@+id/edit_mname_text_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:theme="@style/TIL"
+                        android:hint="@string/shr_hint_mname" android:textColorHint="@color/colorPrimary">
+
+                    <android.support.design.widget.TextInputEditText
+                            android:id="@+id/edit_mname_text_edit"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="text"
+                            android:maxLines="1" android:textColor="@color/colorPrimary"
+                            android:textColorHint="@color/colorPrimary"/>
+                </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputLayout
+                        android:id="@+id/edit_con_text_input"
+                        android:layout_width="match_parent"
+                        android:theme="@style/TIL"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/shr_hint_con"
+
+                        android:textColorHint="@color/colorPrimary">
+
+                    <android.support.design.widget.TextInputEditText
+                            android:id="@+id/edit_con_text_edit"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="text"
+                            android:maxLines="1" android:textColor="@color/colorPrimary"
+                            android:textColorHint="@color/colorPrimary"/>
+                </android.support.design.widget.TextInputLayout>
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                              android:orientation="horizontal">
+                    <android.support.design.button.MaterialButton
+                            android:id="@+id/date_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:text="@string/shr_button_date"/>
+
+                    />
+                    <EditText android:layout_width="80dp" android:layout_height="wrap_content"
+                              android:id="@+id/datetext"
+                              android:focusable="false"
+                              android:longClickable="false"
+                              android:textSize="13sp" android:textColor="@color/colorPrimary"
+                              android:text="12-29-1998"/>
+                </LinearLayout>
+                <android.support.design.button.MaterialButton
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/edit_basic"
+                        android:layout_margin="5dp"
+                        android:text="Change Basic Information"
+                />
+            </LinearLayout>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                          android:layout_margin="10dp"
+                          android:background="@drawable/shape_others"
+                          android:orientation="vertical">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                              android:orientation="vertical"
+                              android:id="@+id/change_email_layout"
+                              android:visibility="visible">
+
+
+                    <android.support.design.widget.TextInputLayout
+                            android:id="@+id/emaili"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/shr_hint_email"
+                            android:theme="@style/TIL"
+
+                            android:textColorHint="@color/colorPrimary" android:visibility="gone">
+
+                        <android.support.design.widget.TextInputEditText
+                                android:id="@+id/emaile"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="text"
+                                android:maxLines="1" android:textColor="@color/colorPrimary"
+                                android:textColorHint="@color/colorPrimary" android:visibility="visible"/>
+                    </android.support.design.widget.TextInputLayout>
+                    <android.support.design.widget.TextInputLayout
+                            android:id="@+id/passi"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:hint="password"
+                            android:theme="@style/TIL"
+                            android:visibility="gone"
+                            android:textColorHint="@color/colorPrimary">
+
+                        <android.support.design.widget.TextInputEditText
+                                android:id="@+id/passe"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="text"
+                                android:maxLines="1" android:textColor="@color/colorPrimary"
+                                android:textColorHint="@color/colorPrimary" android:visibility="visible"/>
+                    </android.support.design.widget.TextInputLayout>
+
+                </LinearLayout>
+                <android.support.design.button.MaterialButton android:layout_width="match_parent"
+                                                              android:layout_height="match_parent"
+                                                              android:id="@+id/change_email"
+                                                              android:layout_margin="5dp"
+                                                              android:text="Change Email Address"
+                                                              android:visibility="visible"/>
+                <android.support.design.button.MaterialButton android:layout_width="match_parent"
+                                                              android:layout_height="match_parent"
+                                                              android:id="@+id/confirm_email_change"
+                                                              android:layout_margin="5dp"
+                                                              android:text="CONFIRM"
+                                                              android:visibility="gone"
+                />
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                              android:orientation="vertical"
+                              android:id="@+id/change_pass_layout"
+                              android:visibility="visible">
+                    <android.support.design.widget.TextInputLayout
+                            android:id="@+id/opassi"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="old password"
+                            android:theme="@style/TIL"
+                            android:visibility="gone"
+                            android:textColorHint="@color/colorPrimary">
+
+                        <android.support.design.widget.TextInputEditText
+                                android:id="@+id/opasse"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="text"
+                                android:maxLines="1" android:textColor="@color/colorPrimary"
+                                android:textColorHint="@color/colorPrimary" android:visibility="visible"/>
+                    </android.support.design.widget.TextInputLayout>
+                    <android.support.design.widget.TextInputLayout
+                            android:id="@+id/npassi"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:hint="new password"
+                            android:theme="@style/TIL"
+                            android:visibility="gone"
+                            android:textColorHint="@color/colorPrimary">
+
+                        <android.support.design.widget.TextInputEditText
+                                android:id="@+id/npasse"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="text"
+                                android:maxLines="1" android:textColor="@color/colorPrimary"
+                                android:textColorHint="@color/colorPrimary" android:visibility="visible"/>
+                    </android.support.design.widget.TextInputLayout>
+                </LinearLayout>
+                <android.support.design.button.MaterialButton android:layout_width="match_parent"
+                                                              android:layout_height="match_parent"
+                                                              android:id="@+id/change_pass"
+                                                              android:layout_margin="5dp"
+                                                              android:text="Change Password"
+                />
+                <android.support.design.button.MaterialButton android:layout_width="match_parent"
+                                                              android:layout_height="match_parent"
+                                                              android:id="@+id/confirm_change_pass"
+                                                              android:layout_margin="5dp"
+                                                              android:text="CONFIRM"
+                                                              android:visibility="gone"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</android.support.design.widget.CoordinatorLayout>

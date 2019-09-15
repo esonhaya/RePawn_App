@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+                                              xmlns:app="http://schemas.android.com/apk/res-auto"
+                                              android:layout_width="match_parent"
+                                              android:layout_height="wrap_content"
+                                              app:cardBackgroundColor="@android:color/white"
+                                              app:cardPreventCornerOverlap="true">
+    <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:padding="5dp"
+                  android:orientation="vertical" android:id="@+id/review_layout">
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+            <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/review_image"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/shaggy"
+                    app:civ_border_width="0dp"
+                    app:civ_border_color="@color/colorGray"
+            />
+            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
+                          android:orientation="vertical">
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                          android:layout_marginLeft="20dp"
+                          android:layout_gravity="center_vertical"
+                          android:text="Jaime Jeebson Haya" android:id="@+id/review_name"
+                          android:textColor="@color/colorDGray" android:textSize="18sp"/>
+
+                <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                    <RatingBar android:layout_width="wrap_content" android:layout_height="wrap_content"
+                               style="?android:attr/ratingBarStyleSmall"
+                               android:id="@+id/review_bar"
+                               android:scaleX="1"
+                               android:scaleY="1"
+                               android:layout_marginLeft="20dp"
+                               android:transformPivotX="0dp"
+                               android:transformPivotY="0dp"
+                               android:isIndicator="true"
+                               android:progressTint="@color/colorPrimary"
+                               android:rating="5"
+                    />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                              android:layout_marginLeft="5dp"
+                              android:id="@+id/review_date" android:text="12/29/1998"
+                              android:textColor="@color/colorGray"
+                              android:textSize="14sp"/>
+                </LinearLayout>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                          android:layout_marginLeft="20dp"
+                          android:maxLines="2"
+                          android:text="The original link I posted is now broken (there's a good reason why posting links only is not the best way to go). You have to style the RatingBar with either ratingBarStyleSmall or a custom style inheriting from Widget.Material.RatingBar.Small (assuming you're using Material Design in your app)."
+                          android:textColor="@color/colorGray" android:id="@+id/review_content"
+                          android:textSize="17sp"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</android.support.design.card.MaterialCardView>

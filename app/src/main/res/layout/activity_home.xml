@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+>
+    <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="60dp"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:orientation="vertical"
+    >
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@color/colorWhite">
+
+            <android.support.design.widget.TextInputLayout
+                    android:id="@+id/search_input"
+                    android:theme="@style/TIL"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Search" android:textColorHint="@color/colorGray">
+
+                <android.support.design.widget.TextInputEditText
+                        android:id="@+id/search_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:textColor="@color/colorPrimary"
+                        android:textColorHint="@color/colorPrimary"/>
+            </android.support.design.widget.TextInputLayout>
+        </LinearLayout>
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:background="@drawable/shape_others"
+                      android:orientation="vertical"
+        >
+            <com.glide.slider.library.SliderLayout
+                    android:id="@+id/slider"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"/>
+            <com.glide.slider.library.Indicators.PagerIndicator
+                    android:id="@+id/custom_indicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"/>
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_others"
+                android:orientation="vertical"
+                android:layout_margin="10dp">
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+            >
+
+                <TextView
+                        android:id="@+id/shopbycat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:text="Shop by Categories"
+                        android:padding="5dp"
+                        android:layout_marginLeft="10dp"
+                        android:textSize="22sp"/>
+
+                <TextView
+                        android:id="@+id/all_pending_orders"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:text="SEE ALL"
+                        android:padding="5dp"
+                        android:layout_marginRight="5dp"
+                        android:textSize="20sp"/>
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rec_cat"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+            </android.support.v7.widget.RecyclerView>
+        </LinearLayout>
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:orientation="vertical"
+                      android:layout_margin="5dp"
+                      android:background="@drawable/shape_others">
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:padding="5dp"
+                    android:layout_marginLeft="10dp"
+                    android:text="Pawnshops"
+                    android:textSize="22sp"
+                    android:textColor="@color/colorPrimaryDark"/>
+            <HorizontalScrollView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="0dp">
+
+                <android.support.v7.widget.RecyclerView
+                        android:layout_marginLeft="25dp"
+                        android:id="@+id/pawnshops_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"></android.support.v7.widget.RecyclerView>
+
+            </HorizontalScrollView>
+            <TextView
+                    android:id="@+id/pawnshop_all"
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="end"
+                    android:padding="5dp"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:text="SEE MORE"
+                    android:textSize="20sp"/>
+        </LinearLayout>
+        <LinearLayout android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="5dp"
+            android:background="@drawable/shape_others">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:padding="5dp"
+                android:layout_marginLeft="10dp"
+                android:text="RePawners"
+                android:textSize="22sp"
+                android:textColor="@color/colorPrimaryDark"/>
+            <HorizontalScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="0dp">
+
+                <android.support.v7.widget.RecyclerView
+                    android:layout_marginLeft="25dp"
+                    android:id="@+id/rep_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"></android.support.v7.widget.RecyclerView>
+
+            </HorizontalScrollView>
+            <TextView
+                android:id="@+id/rep_all"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:gravity="end"
+                android:padding="5dp"
+                android:textColor="@color/colorPrimaryDark"
+                android:text="SEE MORE"
+                android:textSize="20sp"/>
+        </LinearLayout>
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="wrap_content" android:layout_margin="5dp"
+                      android:orientation="vertical"
+                      android:background="@drawable/shape_others">
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:text="Products"
+                    android:textSize="22sp"/>
+
+            <android.support.v7.widget.RecyclerView
+                    android:id="@+id/promoted_products_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="25dp"
+                    android:orientation="horizontal">
+
+            </android.support.v7.widget.RecyclerView>
+
+            <TextView
+                    android:id="@+id/remat_all"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:padding="5dp"
+                    android:text="SEE MORE"
+                    android:textSize="20sp"/>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

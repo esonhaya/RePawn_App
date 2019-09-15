@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:tools="http://schemas.android.com/tools"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+            android:id="@+id/action_locate"
+            android:icon="@drawable/ic_place_black_24dp"
+            app:showAsAction="always"
+
+            android:title="Search"/>
+
+</menu>

@@ -1,0 +1,76 @@
+<resources>
+    <string name="app_name">RePawn</string>
+    <string name="shr_hint_email">email</string>
+    <string name="shr_hint_fname">First Name</string>
+    <string name="shr_hint_lname">Last Name</string>
+    <string name="shr_hint_password">Password</string>
+    <string name="shr_hint_access_code">access code</string>
+    <string name="shr_hint_mname">Middle Name</string>
+    <string name="shr_button_login">LOGIN</string>
+    <string name="shr_button_date">BirthDate</string>
+    <string name="shr_button_signup">Sign Up</string>
+    <string name="shr_button_register">REGISTER</string>
+    <string name="shr_hint_con">Contact Number</string>
+    <string name="caccount">Create an Account</string>
+    <string name="send_another">Send another</string>
+    <string name="s_terms">By pressing Sign Up you have agreed to the Terms and Conditions</string>
+    <string name="email_validation">We require a valid email address. Check your email address for the access code we
+        sent
+        you.
+    </string>
+    <string name="purchase_con">
+        People go to a pawnshop to pawn their items to get money in exchange for their items. A pawn shop is a business
+        that offers loans
+        on items that are not accepted as collateral by traditional banks. An item’s market value usually determines the
+        Loan amount
+        and is expected to be repaid within a specified time frame. If the loan is not compensated (with interest),
+        the borrower’s collateral will be liquidated to recoup any losses incurred by default. People go to a pawnshop
+        in times of needs
+        in money. People go to a pawnshop to pawn their items to get money in exchange for their items. A pawn shop is a
+        business that
+        offers loans on items that are not accepted as collateral by traditional banks. An item’s market value usually
+        determines
+        the Loan amount and is expected to be repaid within a specified time frame. If the loan is not compensated (with
+        interest),
+        the borrower’s collateral will be liquidated to recoup any losses incurred by default. People go to a pawnshop
+        in times of needs
+        in money.
+    </string>
+    <string name="reserve_con">
+        In nowadays, the vast majority exceptionally rely upon the technology. Things that we used to do or apply that
+        cannot be stayed
+        away from or stop for those things have been a piece of our regular daily existences, and we never realized that
+        we step by step
+        thought about them as one of our necessities. Keeping in mind the end goal to support those things together with
+        the essential
+        needs, we buckle down searching for ways to earn money.
+    </string>
+    <string name="wel">Welcome</string>
+    <string name="welcome_accepted">"Great, let's go!"</string>
+    <string name="fpass">forgot password?</string>
+    <string name="welcome_message">You can now start checking the most affordable items available.</string>
+
+
+    <string name="shr_error_password_log">password not match</string>
+    <string name="shr_error_email_reg_used">email address already used</string>
+    <string name="error_empty">Field should not be empty</string>
+    <string name="gps_network_not_enabled">No location services</string>
+    <string name="open_location_settings">Go to settings</string>
+    <string name="Cancel">Cancel</string>
+    <string-array name="emails_array">
+        <item>jeebsonhaya3@gmail.com</item>
+    </string-array>
+    <string name="reviews_count">12 reviews</string>
+    <string name="email_default">jeebsonhaya3@gmail.com</string>
+    <string name="remat_pawn_name">Pawnhero</string>
+    <string-array name="purchase_choices">
+        <item name="online">Online</item>
+        <item name="manual">Manual</item>
+    </string-array>
+    <string-array name="string_array_items">
+        <item>Pawned</item>
+        <item>Reserves</item>
+        <item>Orders</item>
+    </string-array>
+    <string name="title_activity_pawned">Pawned</string>
+</resources>

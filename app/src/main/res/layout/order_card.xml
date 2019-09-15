@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="@android:color/white"
+    app:cardElevation="2dp"
+    app:cardPreventCornerOverlap="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/shape"
+            android:orientation="horizontal">
+
+            <View
+                android:id="@+id/item_ribbon"
+                android:layout_width="8dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorPrimaryDark" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:id="@+id/orderer_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:padding="5dp"
+                    android:text="RePawner Name:"
+                    android:textColor="@color/colorDGray"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/date_sent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:padding="5dp"
+                    android:text="Request Started:"
+                    android:textColor="@color/colorDGray"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/date_accepted"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:padding="5dp"
+                    android:text="Date Accepted:"
+                    android:textColor="@color/colorDGray"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/date_ended"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:padding="5dp"
+                    android:text="Date End:"
+                    android:textColor="@color/colorDGray"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/payment_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:padding="5dp"
+                    android:text="Payment Type:"
+                    android:textColor="@color/colorDGray"
+                    android:textSize="18sp" />
+            </LinearLayout>
+        </LinearLayout>
+</android.support.design.card.MaterialCardView>

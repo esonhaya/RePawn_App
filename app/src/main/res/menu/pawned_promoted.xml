@@ -1,0 +1,16 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:tools="http://schemas.android.com/tools"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+            android:id="@+id/edit_pawned"
+            android:icon="@drawable/ic_edit_black_24dp"
+            android:title=""
+            app:showAsAction="always"/>
+    <item
+            android:id="@+id/delete_pawned"
+            android:title=""
+            app:showAsAction="always"
+            android:icon="@drawable/ic_delete_black_24dp"
+    />
+</menu>

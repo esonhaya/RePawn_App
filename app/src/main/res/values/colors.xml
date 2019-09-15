@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#00c853</color>
+    <color name="colorPrimaryDark">#009624</color>
+    <color name="colorAccent">#5efc82</color>
+    <color name="colorGray">#A9A9A9</color>
+    <color name="colorDGray">#707070</color>
+    <color name="colorBlackGray">#606060</color>
+    <color name="glide_slider_background_color">@color/colorGray</color>
+    <color name="glide_slider_indicator_color">@color/colorDGray</color>
+    <color name="glide_slider_description_color">@color/colorPrimary</color>
+    <color name="glide_slider_description_background_color">@color/colorBlackGray</color>
+</resources>

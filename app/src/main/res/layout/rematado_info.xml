@@ -1,0 +1,107 @@
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                 android:layout_width="match_parent"
+                                                 android:layout_height="match_parent"
+>
+
+    <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:popupTheme="@style/AppTheme.NoActionBar">
+
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+    <ScrollView android:layout_width="match_parent" android:padding="10dp" android:layout_height="wrap_content"
+                android:layout_marginTop="70dp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:orientation="vertical">
+            <ImageView android:layout_width="match_parent" android:layout_height="197dp"
+                       android:src="@drawable/ring"
+                       android:gravity="center"
+            />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:padding="10dp"
+                      android:textSize="20sp"
+                      android:text="" android:id="@+id/rematado_name"
+            />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:paddingLeft="10dp"
+                      android:textSize="17sp"
+                      android:text="Information"
+            />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:paddingLeft="30dp"
+                      android:textSize="17sp"
+                      android:text="Information"
+                      android:id="@+id/rematado_info"
+                      android:maxLines="3"
+            />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:text="SEE MORE"
+                      android:textColor="@color/colorPrimaryDark"
+                      android:gravity="center"
+                      android:id="@+id/see_all_rematados"
+            />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:paddingLeft="10dp"
+                      android:paddingTop="5dp"
+                      android:textSize="17sp"
+                      android:text="From"
+            />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:paddingLeft="30dp"
+                      android:textSize="17sp"
+                      android:text="Pawn Hero"
+                      android:id="@+id/rematado_pawnshop_name"
+                      android:textColor="@color/colorPrimaryDark"
+            />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:paddingLeft="10dp"
+                      android:textSize="17sp"
+                      android:paddingTop="5dp"
+                      android:text="Category"
+            />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:paddingLeft="30dp"
+                      android:textSize="17sp"
+                      android:text="Jewelry"
+                      android:id="@+id/rematado_category"
+                      android:textColor="@color/colorPrimaryDark"
+            />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:paddingLeft="10dp"
+                      android:textSize="17sp"
+                      android:paddingTop="5dp"
+                      android:text="Price at"
+            />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:paddingLeft="30dp"
+                      android:textSize="25sp"
+                      android:text="₱ 6200.75"
+                      android:id="@+id/rematado_price"
+                      android:textColor="@color/colorPrimaryDark"
+            />
+
+            <Button android:id="@+id/btn_order" android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:text="Order"
+                    android:padding="5dp"
+                    android:backgroundTint="@color/colorPrimary"
+            />
+            <Button android:id="@+id/res_btn" android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:text="Reserve"
+                    android:padding="5dp"
+                    android:backgroundTint="@color/colorPrimary"
+            />
+        </LinearLayout>
+    </ScrollView>
+</android.support.design.widget.CoordinatorLayout>
+

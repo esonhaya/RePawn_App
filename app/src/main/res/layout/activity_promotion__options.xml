@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                 android:layout_width="match_parent"
+                                                 android:layout_height="match_parent"
+                                                 xmlns:tools="http://schemas.android.com/tools"
+                                                 tools:context=".Items.Promotion_Options"
+>
+    <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:popupTheme="@style/AppTheme.NoActionBar">
+
+        </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".Login_and_Before.Welcome">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:orientation="vertical"
+                      android:padding="5dp" android:background="@drawable/shape_others" android:layout_marginTop="60dp">
+
+            <TextView
+                    android:text="Payment Options"
+                    android:layout_width="wrap_content"
+                    android:layout_margin="20dp"
+                    android:layout_height="wrap_content" android:id="@+id/textView" android:layout_weight="1"
+                    android:textSize="30dp" android:textColor="@color/colorPrimaryDark"/>
+
+            <RadioGroup android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:layout_margin="20dp"
+                        android:id="@+id/option_group">
+                <RadioButton android:layout_width="match_parent" android:layout_height="wrap_content"
+                             android:text="100 pesos for a week" android:textSize="24sp" android:layout_margin="10dp"
+                             android:buttonTint="@color/colorPrimary"
+                             android:id="@+id/wan" android:textColor="@color/colorPrimary"/>
+                <RadioButton android:layout_width="match_parent" android:layout_height="wrap_content"
+                             android:text="200 pesos for 2 weeks" android:textSize="24sp" android:layout_margin="10dp"
+                             android:buttonTint="@color/colorPrimary"
+                             android:id="@+id/too" android:textColor="@color/colorPrimary"/>
+                <RadioButton android:layout_width="match_parent" android:layout_height="wrap_content"
+                             android:text="300 pesos for a month" android:textSize="24sp" android:layout_margin="10dp"
+                             android:buttonTint="@color/colorPrimary"
+                             android:id="@+id/tree" android:textColor="@color/colorPrimary"/>
+            </RadioGroup>
+            <Button
+                    android:text="Pay with Paypal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/pay_btn" android:layout_weight="1"
+                    android:layout_margin="10dp"/>
+        </LinearLayout>
+    </ScrollView>
+</android.support.design.widget.CoordinatorLayout>

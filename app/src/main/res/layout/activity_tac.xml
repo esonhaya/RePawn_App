@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            tools:context=".Login_and_Before.Welcome">
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:orientation="vertical"
+            android:padding="24dp"
+            android:paddingTop="16dp">
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                  android:gravity="center"
+                  android:text="Terms and Conditions"
+                  android:textSize="24sp" android:textColor="@color/colorPrimaryDark"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="match_parent"
+                  android:textColor="@color/colorPrimary"
+                  android:textSize="18sp"
+                  android:text="Purchase"
+        />
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                  android:text="@string/purchase_con"
+                  android:textSize="15sp"
+                  android:layout_marginLeft="10dp"
+                  android:textColor="@color/colorAccent"
+
+        />
+        <TextView android:layout_width="wrap_content" android:layout_height="match_parent"
+                  android:textColor="@color/colorPrimary"
+                  android:textSize="18sp"
+                  android:text="Reservation"
+        />
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                  android:text="@string/reserve_con"
+                  android:textSize="15sp"
+                  android:layout_marginLeft="10dp"
+                  android:textColor="@color/colorAccent"
+
+        />
+
+    </LinearLayout>
+</ScrollView>
