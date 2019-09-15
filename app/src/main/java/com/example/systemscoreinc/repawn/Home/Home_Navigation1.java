@@ -24,6 +24,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -44,6 +45,7 @@ import com.example.systemscoreinc.repawn.Home.Pawnshops.Home_Pawnshops_Adapter;
 import com.example.systemscoreinc.repawn.Home.Pawnshops.PopularList;
 import com.example.systemscoreinc.repawn.Home.RePawners.RePawnerList;
 import com.example.systemscoreinc.repawn.Home.RePawners.RePawner_Adapter;
+import com.example.systemscoreinc.repawn.Home.Search.Search;
 import com.example.systemscoreinc.repawn.IpConfig;
 import com.example.systemscoreinc.repawn.ItemList;
 import com.example.systemscoreinc.repawn.Items.Pawned;
@@ -71,6 +73,7 @@ public class Home_Navigation1 extends AppCompatActivity implements BaseSliderVie
     IpConfig ip = new IpConfig();
     String url = ip.getUrl() + "home_navigation1.php";
     TextView tvEmail, pawnshop_all, remats_all, rep_all;
+    EditText search_input;
     SearchView search;
     private DrawerLayout mDrawerLayout;
     private SliderLayout mDemoSlider;
@@ -114,13 +117,6 @@ public class Home_Navigation1 extends AppCompatActivity implements BaseSliderVie
         location_related();
     }
 
-    public void refresh() {
-        finish();
-        overridePendingTransition(0, 0);
-        startActivity(getIntent());
-        overridePendingTransition(0, 0);
-    }
-
     public void all_onclick() {
         pawnshop_all.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,6 +132,17 @@ public class Home_Navigation1 extends AppCompatActivity implements BaseSliderVie
                 // startActivity(new Intent(Home_Navigation1.this, See_All_Rematados.class));
             }
         });
+        search_input.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent to_search = new Intent(Home_Navigation1.this, Search.class);
+                Log.e("items", String.valueOf(rep_list));
+                to_search.putExtra("products", (ArrayList<ItemList>) item_list);
+                to_search.putExtra("repawners", (ArrayList<RePawnerList>) rep_list);
+                startActivity(to_search);
+            }
+        });
+
 
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
@@ -160,8 +167,10 @@ public class Home_Navigation1 extends AppCompatActivity implements BaseSliderVie
                             case R.id.nav_orders:
                                 startActivity(new Intent(Home_Navigation1.this, Orders.class));
                                 break;
+
                             case R.id.nav_logout:
                                 session.logoutUser();
+                                break;
                         }
                         return true;
                     }
@@ -176,6 +185,7 @@ public class Home_Navigation1 extends AppCompatActivity implements BaseSliderVie
         item_view = findViewById(R.id.promoted_products_view);
         cat_view = findViewById(R.id.rec_cat);
         rep_view = findViewById(R.id.rep_view);
+        search_input = findViewById(R.id.search_edit);
         pawnshop_view.setHasFixedSize(true);
         item_view.setHasFixedSize(true);
         cat_view.setHasFixedSize(true);

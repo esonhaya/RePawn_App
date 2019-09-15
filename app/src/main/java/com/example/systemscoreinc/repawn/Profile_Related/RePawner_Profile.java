@@ -13,21 +13,31 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RatingBar;
+import android.widget.TextView;
 
-import com.android.volley.*;
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.systemscoreinc.repawn.FeedbackRatings.Feedback_Ratings;
 import com.example.systemscoreinc.repawn.FeedbackRatings.Feedback_Ratings_Adapter;
 import com.example.systemscoreinc.repawn.FeedbackRatings.Feedback_Ratings_List;
 import com.example.systemscoreinc.repawn.Home.Items.Home_Items_Adapter;
-import com.example.systemscoreinc.repawn.Home.Home_Navigation1;
-import com.example.systemscoreinc.repawn.*;
+import com.example.systemscoreinc.repawn.IpConfig;
+import com.example.systemscoreinc.repawn.ItemList;
 import com.example.systemscoreinc.repawn.Profile_Related.Follower.Follower_Adapter;
 import com.example.systemscoreinc.repawn.Profile_Related.Follower.Follower_List;
-import com.squareup.picasso.MemoryPolicy;
 import com.example.systemscoreinc.repawn.R;
+import com.example.systemscoreinc.repawn.Session;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 import com.valdesekamdem.library.mdtoast.MDToast;
@@ -87,10 +97,6 @@ public class RePawner_Profile extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // perform whatever you want on back arrow click
-                Intent intent = new Intent(RePawner_Profile.this, Home_Navigation1.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                finish();
                 finish();
             }
         });

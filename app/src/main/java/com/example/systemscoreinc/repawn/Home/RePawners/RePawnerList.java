@@ -1,6 +1,8 @@
 package com.example.systemscoreinc.repawn.Home.RePawners;
 
-public class RePawnerList
+import java.io.Serializable;
+
+public class RePawnerList implements Serializable
 {
     String rname,rpic;
     int rate_count,rate_total,follow_count,user_id;

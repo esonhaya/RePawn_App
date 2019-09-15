@@ -1,15 +1,136 @@
 package com.example.systemscoreinc.repawn.Home.Search;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.View;
 
+import com.example.systemscoreinc.repawn.Home.Home_Navigation1;
+import com.example.systemscoreinc.repawn.Home.Items.Home_Items_Adapter;
+import com.example.systemscoreinc.repawn.Home.RePawners.RePawnerList;
+import com.example.systemscoreinc.repawn.Home.RePawners.RePawner_Adapter;
+import com.example.systemscoreinc.repawn.ItemList;
 import com.example.systemscoreinc.repawn.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
+
 public class Search extends AppCompatActivity {
+
+    private Toolbar toolbar;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+    List<ItemList> itemlist;
+    List<RePawnerList> replist;
+    RePawner_Adapter ra;
+    Home_Items_Adapter hia;
+    Context context;
+    RecyclerView prod_view;
+    RecyclerView rep_view;
+    Bundle extra;
+    Intent i;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+        i = getIntent();
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        viewPager = findViewById(R.id.viewpager);
+        setupViewPager(viewPager);
+        getSupportActionBar().setTitle("Search");
+        tabLayout = findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // perform whatever you want on back arrow click
+                Intent intent = new Intent(Search.this, Home_Navigation1.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
+            }
+        });
+        context = this;
+        extra = getIntent().getExtras();
+        // popRecycle();
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.search_menu, menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    public void getProducts(View rootView) {
+        itemlist = (ArrayList<ItemList>) i.getSerializableExtra("products");
+        Log.e("list", String.valueOf(itemlist));
+        hia = new Home_Items_Adapter(context, itemlist);
+        prod_view = rootView.findViewById(R.id.prod_view);
+        prod_view.setHasFixedSize(true);
+        prod_view.setLayoutManager(new GridLayoutManager(context, 2));
+        prod_view.setAdapter(hia);
+    }
+
+    public void getRePawners(View rootView) {
+        replist = (ArrayList<RePawnerList>) i.getSerializableExtra("repawners");
+        Log.e("rep", String.valueOf(replist));
+        ra = new RePawner_Adapter(context, replist);
+        rep_view = rootView.findViewById(R.id.rep_view);
+        rep_view.setHasFixedSize(true);
+        rep_view.setLayoutManager(new GridLayoutManager(context, 4));
+        rep_view.setAdapter(ra);
+    }
+
+    private void setupViewPager(ViewPager viewPager) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new Products(), "Products");
+        adapter.addFragment(new Products(), "Pawnshops");
+        adapter.addFragment(new RePawners(), "RePawners");
+        viewPager.setAdapter(adapter);
+    }
+
+    class ViewPagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
+
+        public ViewPagerAdapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
     }
 }
