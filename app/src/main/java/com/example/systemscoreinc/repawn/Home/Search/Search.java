@@ -20,10 +20,10 @@ import android.view.View;
 
 import com.example.systemscoreinc.repawn.Home.Home_Navigation1;
 import com.example.systemscoreinc.repawn.Home.Items.Home_Items_Adapter;
-import com.example.systemscoreinc.repawn.Home.Pawnshops.Home_Pawnshops_Adapter;
+import com.example.systemscoreinc.repawn.Home.Pawnshops.All_Pawnshops.All_Pawnshops_Adapter;
 import com.example.systemscoreinc.repawn.Home.Pawnshops.PopularList;
+import com.example.systemscoreinc.repawn.Home.RePawners.All_RePawners.All_RePawners_Adapter;
 import com.example.systemscoreinc.repawn.Home.RePawners.RePawnerList;
-import com.example.systemscoreinc.repawn.Home.RePawners.RePawner_Adapter;
 import com.example.systemscoreinc.repawn.ItemList;
 import com.example.systemscoreinc.repawn.R;
 import com.jaredrummler.materialspinner.MaterialSpinner;
@@ -41,8 +41,8 @@ public class Search extends AppCompatActivity implements SearchView.OnQueryTextL
     List<ItemList> itemlist;
     List<RePawnerList> replist;
     List<PopularList> poplist;
-    Home_Pawnshops_Adapter hpa;
-    RePawner_Adapter ra;
+    All_Pawnshops_Adapter hpa;
+    All_RePawners_Adapter ra;
     Home_Items_Adapter hia;
     Context context;
     RecyclerView prod_view;
@@ -110,10 +110,10 @@ public class Search extends AppCompatActivity implements SearchView.OnQueryTextL
     public void getPawnshops(View rootView) {
         poplist = (ArrayList<PopularList>) i.getSerializableExtra("pawnshops");
         Log.e("list", String.valueOf(poplist));
-        hpa = new Home_Pawnshops_Adapter(context, poplist);
+        hpa = new All_Pawnshops_Adapter(context, poplist);
         pawn_view = rootView.findViewById(R.id.pawnshop_view);
         pawn_view.setHasFixedSize(true);
-        pawn_view.setLayoutManager(new GridLayoutManager(context, 2));
+        pawn_view.setLayoutManager(new GridLayoutManager(context, 1));
         pawn_view.setAdapter(hpa);
     }
 
@@ -131,10 +131,10 @@ public class Search extends AppCompatActivity implements SearchView.OnQueryTextL
     public void getRePawners(View rootView) {
         replist = (ArrayList<RePawnerList>) i.getSerializableExtra("repawners");
         Log.e("rep", String.valueOf(replist));
-        ra = new RePawner_Adapter(context, replist);
+        ra = new All_RePawners_Adapter(context, replist);
         rep_view = rootView.findViewById(R.id.rep_view);
         rep_view.setHasFixedSize(true);
-        rep_view.setLayoutManager(new GridLayoutManager(context, 4));
+        rep_view.setLayoutManager(new GridLayoutManager(context, 1));
         rep_view.setAdapter(ra);
         rs = rootView.findViewById(R.id.spinner);
         rs.setItems("Sort by Popularity", "Sort by Most Reviewed", "Sort by Most Rated", "Sort by Name");
@@ -149,6 +149,7 @@ public class Search extends AppCompatActivity implements SearchView.OnQueryTextL
                     break;
                 case 3:
                     Collections.sort(replist, RePawnerList.Name_Compare);
+                    ra.notifyDataSetChanged();
                     break;
             }
 

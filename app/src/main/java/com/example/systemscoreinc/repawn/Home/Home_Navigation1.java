@@ -40,6 +40,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.systemscoreinc.repawn.Home.Category.CategoryList;
 import com.example.systemscoreinc.repawn.Home.Category.Home_Cat_Adapter;
 import com.example.systemscoreinc.repawn.Home.Items.Home_Items_Adapter;
+import com.example.systemscoreinc.repawn.Home.Pawnshops.All_Pawnshops.All_Pawnshops;
 import com.example.systemscoreinc.repawn.Home.Pawnshops.Home_Pawnshops_Adapter;
 import com.example.systemscoreinc.repawn.Home.Pawnshops.PopularList;
 import com.example.systemscoreinc.repawn.Home.RePawners.All_RePawners.All_RePawners;
@@ -119,9 +120,9 @@ public class Home_Navigation1 extends AppCompatActivity implements BaseSliderVie
 
     public void all_onclick() {
         pawnshop_all.setOnClickListener(v -> {
-//                Intent to_pawnshops = new Intent(Home_Navigation1.this, All_Pawnshops.class);
-//                to_pawnshops.putExtra("pawnshops", (ArrayList<PopularList>) pawnshop_list);
-//                startActivity(to_pawnshops);
+                Intent to_pawnshops = new Intent(Home_Navigation1.this, All_Pawnshops.class);
+                to_pawnshops.putExtra("pawnshops", (ArrayList<PopularList>) pawnshop_list);
+                startActivity(to_pawnshops);
 
         });
         remats_all.setOnClickListener(v -> {

@@ -34,7 +34,9 @@
         <activity android:name=".Home.Search.Search"></activity>
         <activity android:name=".Orders.Order_Info"></activity>
         <activity android:name=".Orders.Orders" />
+    <activity android:name=".Home.Pawnshops.All_Pawnshops.All_Pawnshops">
 
+    </activity>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAxmvL3E9ghrb-T8zQKymoMi9KYoVW0fQ0" />

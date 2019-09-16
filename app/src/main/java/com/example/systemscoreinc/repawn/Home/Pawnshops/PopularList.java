@@ -16,7 +16,7 @@ public class PopularList implements Serializable {
         return follow_count;
     }
 
-    public double getRate_total() {
+    public int getRate_total() {
         return rate_total;
     }
 

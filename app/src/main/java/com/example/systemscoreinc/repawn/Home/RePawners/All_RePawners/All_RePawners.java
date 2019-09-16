@@ -6,7 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.example.systemscoreinc.repawn.Home.RePawners.RePawnerList;
 import com.example.systemscoreinc.repawn.IpConfig;
@@ -16,7 +19,7 @@ import com.example.systemscoreinc.repawn.Session;
 import java.util.ArrayList;
 import java.util.List;
 
-public class All_RePawners extends AppCompatActivity {
+public class All_RePawners extends AppCompatActivity implements SearchView.OnQueryTextListener {
     private Toolbar toolbar;
     Bundle extras;
     IpConfig ip = new IpConfig();
@@ -49,5 +52,26 @@ public class All_RePawners extends AppCompatActivity {
         LinearLayoutManager rep_layout = new GridLayoutManager(context, 1);
         all_rep.setLayoutManager(rep_layout);
         all_rep.setAdapter(ara);
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.search_menu, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setQueryHint("Search");
+        searchView.setOnQueryTextListener(this);
+        searchView.setIconified(false);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String s) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String s) {
+        ara.filter(s);
+        return false;
     }
 }
