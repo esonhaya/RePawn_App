@@ -38,7 +38,7 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAxmvL3E9ghrb-T8zQKymoMi9KYoVW0fQ0" />
-
+        <activity android:name=".Home.RePawners.All_RePawners.All_RePawners"/>
         <activity android:name=".Pawnshop.Pawnshop_Locate" />
         <activity android:name=".FeedbackRatings.Feedback_Ratings" />
         <activity android:name=".Pawnshop.Pawnshop_Page" />

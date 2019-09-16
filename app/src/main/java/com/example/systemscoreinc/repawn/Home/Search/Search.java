@@ -11,47 +11,59 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.example.systemscoreinc.repawn.Home.Home_Navigation1;
 import com.example.systemscoreinc.repawn.Home.Items.Home_Items_Adapter;
+import com.example.systemscoreinc.repawn.Home.Pawnshops.Home_Pawnshops_Adapter;
+import com.example.systemscoreinc.repawn.Home.Pawnshops.PopularList;
 import com.example.systemscoreinc.repawn.Home.RePawners.RePawnerList;
 import com.example.systemscoreinc.repawn.Home.RePawners.RePawner_Adapter;
 import com.example.systemscoreinc.repawn.ItemList;
 import com.example.systemscoreinc.repawn.R;
+import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
-public class Search extends AppCompatActivity {
+public class Search extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
     List<ItemList> itemlist;
     List<RePawnerList> replist;
+    List<PopularList> poplist;
+    Home_Pawnshops_Adapter hpa;
     RePawner_Adapter ra;
     Home_Items_Adapter hia;
     Context context;
     RecyclerView prod_view;
     RecyclerView rep_view;
+    RecyclerView pawn_view;
     Bundle extra;
     Intent i;
+    MaterialSpinner rs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         i = getIntent();
+
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         viewPager = findViewById(R.id.viewpager);
         setupViewPager(viewPager);
+
         getSupportActionBar().setTitle("Search");
         tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
@@ -74,7 +86,35 @@ public class Search extends AppCompatActivity {
 
         getMenuInflater().inflate(R.menu.search_menu, menu);
 
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+
+        SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setQueryHint("Search");
+        searchView.setOnQueryTextListener(this);
+        searchView.setIconified(false);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    public boolean onQueryTextSubmit(String query) {
+        //     ra.filter(query);
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String s) {
+        ra.filter(s);
+        hpa.filter(s);
+        return false;
+    }
+
+    public void getPawnshops(View rootView) {
+        poplist = (ArrayList<PopularList>) i.getSerializableExtra("pawnshops");
+        Log.e("list", String.valueOf(poplist));
+        hpa = new Home_Pawnshops_Adapter(context, poplist);
+        pawn_view = rootView.findViewById(R.id.pawnshop_view);
+        pawn_view.setHasFixedSize(true);
+        pawn_view.setLayoutManager(new GridLayoutManager(context, 2));
+        pawn_view.setAdapter(hpa);
     }
 
     public void getProducts(View rootView) {
@@ -85,6 +125,7 @@ public class Search extends AppCompatActivity {
         prod_view.setHasFixedSize(true);
         prod_view.setLayoutManager(new GridLayoutManager(context, 2));
         prod_view.setAdapter(hia);
+
     }
 
     public void getRePawners(View rootView) {
@@ -95,12 +136,29 @@ public class Search extends AppCompatActivity {
         rep_view.setHasFixedSize(true);
         rep_view.setLayoutManager(new GridLayoutManager(context, 4));
         rep_view.setAdapter(ra);
+        rs = rootView.findViewById(R.id.spinner);
+        rs.setItems("Sort by Popularity", "Sort by Most Reviewed", "Sort by Most Rated", "Sort by Name");
+        rs.setOnItemSelectedListener((view, position, id, item) -> {
+
+            switch (position) {
+                case 0:
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    Collections.sort(replist, RePawnerList.Name_Compare);
+                    break;
+            }
+
+        });
     }
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new Products(), "Products");
-        adapter.addFragment(new Products(), "Pawnshops");
+        adapter.addFragment(new Pawnshops(), "Pawnshops");
         adapter.addFragment(new RePawners(), "RePawners");
         viewPager.setAdapter(adapter);
     }

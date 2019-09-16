@@ -1,6 +1,8 @@
 package com.example.systemscoreinc.repawn.Home.Pawnshops;
 
-public class PopularList {
+import java.io.Serializable;
+
+public class PopularList implements Serializable {
     private String p_name, padd, p_date_joined,p_image;
     private int rate_count, p_id,follow_count;
     private int rate_total;

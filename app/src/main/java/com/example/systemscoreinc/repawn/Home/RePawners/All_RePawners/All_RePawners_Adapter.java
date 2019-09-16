@@ -1,5 +1,4 @@
-package com.example.systemscoreinc.repawn.Home.RePawners;
-
+package com.example.systemscoreinc.repawn.Home.RePawners.All_RePawners;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.systemscoreinc.repawn.Home.RePawners.RePawnerList;
 import com.example.systemscoreinc.repawn.IpConfig;
 import com.example.systemscoreinc.repawn.Profile_Related.RePawner_Profile;
 import com.example.systemscoreinc.repawn.R;
@@ -19,20 +19,13 @@ import java.util.List;
 import java.util.Locale;
 
 
-/**
- * Adapter used to show a simple grid of products.
- */
-public class RePawner_Adapter extends RecyclerView.Adapter<RePawner_ViewHolder> {
+public class All_RePawners_Adapter extends RecyclerView.Adapter<All_RePawners_ViewHolder> {
     private List<RePawnerList> mDataset;
     private Context Ctx;
     IpConfig ip = new IpConfig();
     private ArrayList<RePawnerList> arraylist;
-    // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
-    // you provide access to all the views for a data item in a view holder
 
-    // Provide a suitable constructor (depends on the kind of dataset)
-    public RePawner_Adapter(Context context, List<RePawnerList> myDataset) {
+    public All_RePawners_Adapter(Context context, List<RePawnerList> myDataset) {
         mDataset = myDataset;
         Ctx = context;
         this.arraylist = new ArrayList<>();
@@ -42,19 +35,25 @@ public class RePawner_Adapter extends RecyclerView.Adapter<RePawner_ViewHolder> 
     // Create new views (invoked by the layout manager)
     @NonNull
     @Override
-    public RePawner_ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                  int viewType) {
+    public All_RePawners_ViewHolder onCreateViewHolder(ViewGroup parent,
+                                                       int viewType) {
         // create a new view
-        View layoutView = LayoutInflater.from(Ctx).inflate(R.layout.repawner_card, parent, false);
-        return new RePawner_ViewHolder(layoutView);
+        View layoutView = LayoutInflater.from(Ctx).inflate(R.layout.all_repawners_card, parent, false);
+        return new All_RePawners_ViewHolder(layoutView);
     }
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(@NonNull RePawner_ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull All_RePawners_ViewHolder holder, final int position) {
 
         final RePawnerList list = mDataset.get(position);
         holder.rep_name.setText(list.getRname());
+        holder.follow_count.setText(list.getFollow_count() + " followers");
+        float rate_avg = 0;
+        if (list.getRate_count() != 0 && list.getRate_total() != 0) {
+            rate_avg = list.getRate_total() / list.getRate_count();
+        }
+        holder.rep_rate.setRating(rate_avg);
         Picasso.get()
                 .load(ip.getUrl_image() + list.getRpic())
                 .fit()
@@ -66,11 +65,8 @@ public class RePawner_Adapter extends RecyclerView.Adapter<RePawner_ViewHolder> 
 
 
         });
-
-
-        //  holder.productTitle.setText(); // Here's your value
-
     }
+
     public void filter(String charText) {
         charText = charText.toLowerCase(Locale.getDefault());
         mDataset.clear();

@@ -22,7 +22,6 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -43,6 +42,7 @@ import com.example.systemscoreinc.repawn.Home.Category.Home_Cat_Adapter;
 import com.example.systemscoreinc.repawn.Home.Items.Home_Items_Adapter;
 import com.example.systemscoreinc.repawn.Home.Pawnshops.Home_Pawnshops_Adapter;
 import com.example.systemscoreinc.repawn.Home.Pawnshops.PopularList;
+import com.example.systemscoreinc.repawn.Home.RePawners.All_RePawners.All_RePawners;
 import com.example.systemscoreinc.repawn.Home.RePawners.RePawnerList;
 import com.example.systemscoreinc.repawn.Home.RePawners.RePawner_Adapter;
 import com.example.systemscoreinc.repawn.Home.Search.Search;
@@ -118,62 +118,58 @@ public class Home_Navigation1 extends AppCompatActivity implements BaseSliderVie
     }
 
     public void all_onclick() {
-        pawnshop_all.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //startActivity(new Intent(Home_Navigation1.this, See_All_Pawnshops.class));
-            }
-        });
-        remats_all.setOnClickListener(new View.OnClickListener() {
+        pawnshop_all.setOnClickListener(v -> {
+//                Intent to_pawnshops = new Intent(Home_Navigation1.this, All_Pawnshops.class);
+//                to_pawnshops.putExtra("pawnshops", (ArrayList<PopularList>) pawnshop_list);
+//                startActivity(to_pawnshops);
 
-
-            @Override
-            public void onClick(View v) {
-                // startActivity(new Intent(Home_Navigation1.this, See_All_Rematados.class));
-            }
         });
-        search_input.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent to_search = new Intent(Home_Navigation1.this, Search.class);
-                Log.e("items", String.valueOf(rep_list));
-                to_search.putExtra("products", (ArrayList<ItemList>) item_list);
-                to_search.putExtra("repawners", (ArrayList<RePawnerList>) rep_list);
-                startActivity(to_search);
-            }
+        remats_all.setOnClickListener(v -> {
+            // startActivity(new Intent(Home_Navigation1.this, See_All_Rematados.class));
+        });
+        rep_all.setOnClickListener(v -> {
+            Intent to_repawners = new Intent(Home_Navigation1.this, All_RePawners.class);
+            to_repawners.putExtra("repawners", (ArrayList<RePawnerList>) rep_list);
+            startActivity(to_repawners);
+        });
+        search_input.setOnClickListener(view -> {
+            Intent to_search = new Intent(Home_Navigation1.this, Search.class);
+            Log.e("items", String.valueOf(rep_list));
+            Log.e("pawnshops", String.valueOf(pawnshop_list));
+            to_search.putExtra("products", (ArrayList<ItemList>) item_list);
+            to_search.putExtra("repawners", (ArrayList<RePawnerList>) rep_list);
+            to_search.putExtra("pawnshops", (ArrayList<PopularList>) pawnshop_list);
+            startActivity(to_search);
         });
 
 
         navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        // set item as selected to persist highlight
-                        int id = menuItem.getItemId();
-                        menuItem.setChecked(true);
-                        // close drawer when item is tapped
-                        mDrawerLayout.closeDrawers();
-                        switch (id) {
-                            case R.id.nav_profile:
-                                Intent to_prof = new Intent(Home_Navigation1.this, RePawner_Profile.class);
-                                to_prof.putExtra("user_id", session.getID());
-                                startActivity(to_prof);
-                                break;
-                            case R.id.nav_items:
+                menuItem -> {
+                    // set item as selected to persist highlight
+                    int id = menuItem.getItemId();
+                    menuItem.setChecked(true);
+                    // close drawer when item is tapped
+                    mDrawerLayout.closeDrawers();
+                    switch (id) {
+                        case R.id.nav_profile:
+                            Intent to_prof = new Intent(Home_Navigation1.this, RePawner_Profile.class);
+                            to_prof.putExtra("user_id", session.getID());
+                            startActivity(to_prof);
+                            break;
+                        case R.id.nav_items:
 //                                Intent to_pawned=new Intent(Home_Navigation1.this, Pawned.class);
 //                                startActivity(to_pawned);
-                                startActivity(new Intent(Home_Navigation1.this, Pawned.class));
-                                break;
-                            case R.id.nav_orders:
-                                startActivity(new Intent(Home_Navigation1.this, Orders.class));
-                                break;
+                            startActivity(new Intent(Home_Navigation1.this, Pawned.class));
+                            break;
+                        case R.id.nav_orders:
+                            startActivity(new Intent(Home_Navigation1.this, Orders.class));
+                            break;
 
-                            case R.id.nav_logout:
-                                session.logoutUser();
-                                break;
-                        }
-                        return true;
+                        case R.id.nav_logout:
+                            session.logoutUser();
+                            break;
                     }
+                    return true;
                 });
     }
 
@@ -181,6 +177,7 @@ public class Home_Navigation1 extends AppCompatActivity implements BaseSliderVie
     private void declarestuffs() {
         pawnshop_all = this.findViewById(R.id.pawnshop_all);
         remats_all = this.findViewById(R.id.remat_all);
+        rep_all = this.findViewById(R.id.rep_all);
         pawnshop_view = findViewById(R.id.pawnshops_view);
         item_view = findViewById(R.id.promoted_products_view);
         cat_view = findViewById(R.id.rec_cat);
@@ -236,10 +233,7 @@ public class Home_Navigation1 extends AppCompatActivity implements BaseSliderVie
                     e.printStackTrace();
                 }
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-            }
+        }, error -> {
         }) {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
@@ -275,10 +269,7 @@ public class Home_Navigation1 extends AppCompatActivity implements BaseSliderVie
                     e.printStackTrace();
                 }
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-            }
+        }, error -> {
         }) {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();

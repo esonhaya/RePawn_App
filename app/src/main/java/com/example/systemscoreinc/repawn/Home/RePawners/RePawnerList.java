@@ -1,8 +1,9 @@
 package com.example.systemscoreinc.repawn.Home.RePawners;
 
 import java.io.Serializable;
+import java.util.Comparator;
 
-public class RePawnerList implements Serializable
+public class RePawnerList implements Serializable, Comparable<RePawnerList>
 {
     String rname,rpic;
     int rate_count,rate_total,follow_count,user_id;
@@ -39,4 +40,10 @@ public class RePawnerList implements Serializable
         this.rate_total = rate_total;
         this.follow_count = follow_count;
     }
+
+    @Override
+    public int compareTo(RePawnerList rePawnerList) {
+        return 0;
+    }
+    public static Comparator<RePawnerList> Name_Compare = (one, other) -> one.rname.compareTo(other.rname);
 }

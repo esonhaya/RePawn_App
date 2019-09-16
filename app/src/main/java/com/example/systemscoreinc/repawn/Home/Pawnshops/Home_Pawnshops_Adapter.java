@@ -7,12 +7,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.example.systemscoreinc.repawn.IpConfig;
 import com.example.systemscoreinc.repawn.Pawnshop.Pawnshop_Page;
 import com.example.systemscoreinc.repawn.R;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -22,7 +25,7 @@ public class Home_Pawnshops_Adapter extends RecyclerView.Adapter<Home_Pawnshop_V
     private List<PopularList> mDataset;
     private Context Ctx;
     IpConfig ip = new IpConfig();
-
+    private ArrayList<PopularList> arraylist;
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
@@ -31,6 +34,8 @@ public class Home_Pawnshops_Adapter extends RecyclerView.Adapter<Home_Pawnshop_V
     public Home_Pawnshops_Adapter(Context context, List<PopularList> myDataset) {
         mDataset = myDataset;
         Ctx = context;
+        this.arraylist = new ArrayList<>();
+        this.arraylist.addAll(mDataset);
     }
 
     // Create new views (invoked by the layout manager)
@@ -63,14 +68,23 @@ public class Home_Pawnshops_Adapter extends RecyclerView.Adapter<Home_Pawnshop_V
                 Intent to_pawnshop_page = new Intent(Ctx, Pawnshop_Page.class);
                 to_pawnshop_page.putExtra("user_id", poplist.getP_id());
                 Ctx.startActivity(to_pawnshop_page);
-
-
             }
         });
+    }
 
-
-        //  holder.productTitle.setText(); // Here's your value
-
+    public void filter(String charText) {
+        charText = charText.toLowerCase(Locale.getDefault());
+        mDataset.clear();
+        if (charText.length() == 0) {
+            mDataset.addAll(arraylist);
+        } else {
+            for (PopularList wp : arraylist) {
+                if (wp.getP_name().toLowerCase(Locale.getDefault()).contains(charText)) {
+                    mDataset.add(wp);
+                }
+            }
+        }
+        notifyDataSetChanged();
     }
 
     // Return the size of your dataset (invoked by the layout manager)
