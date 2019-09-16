@@ -3,10 +3,9 @@ package com.example.systemscoreinc.repawn.Home.RePawners;
 import java.io.Serializable;
 import java.util.Comparator;
 
-public class RePawnerList implements Serializable, Comparable<RePawnerList>
-{
-    String rname,rpic;
-    int rate_count,rate_total,follow_count,user_id;
+public class RePawnerList implements Serializable, Comparable<RePawnerList> {
+    String rname, rpic;
+    int rate_count, rate_total, follow_count, user_id;
 
     public String getRname() {
         return rname;
@@ -45,5 +44,16 @@ public class RePawnerList implements Serializable, Comparable<RePawnerList>
     public int compareTo(RePawnerList rePawnerList) {
         return 0;
     }
+
+    public int Follow_Compare(RePawnerList d, RePawnerList d1) {
+        return d.follow_count - d1.follow_count;
+    }
+
     public static Comparator<RePawnerList> Name_Compare = (one, other) -> one.rname.compareTo(other.rname);
+    public static Comparator<RePawnerList> Follow_Compare = (one, other) -> other.getFollow_count() - one.getFollow_count();
+    public static Comparator<RePawnerList> Most_Reviews = (one, other) -> other.getRate_count() - one.getRate_count();
+    public static Comparator<RePawnerList> Most_Rated = (one, other) -> other.getRate_total() - one.getRate_total();
+
 }
+// return o2.getGrade() - o1.getGrade();
+

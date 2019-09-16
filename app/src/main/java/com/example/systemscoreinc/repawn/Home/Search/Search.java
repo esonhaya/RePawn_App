@@ -137,18 +137,20 @@ public class Search extends AppCompatActivity implements SearchView.OnQueryTextL
         rep_view.setLayoutManager(new GridLayoutManager(context, 1));
         rep_view.setAdapter(ra);
         rs = rootView.findViewById(R.id.spinner);
-        rs.setItems("Sort by Popularity", "Sort by Most Reviewed", "Sort by Most Rated", "Sort by Name");
+        rs.setItems("Sort by Popularity", "Sort by Most Reviewed", "Sort by Most Rated");
         rs.setOnItemSelectedListener((view, position, id, item) -> {
 
             switch (position) {
                 case 0:
+                    Collections.sort(replist, RePawnerList.Follow_Compare);
+                    ra.notifyDataSetChanged();
                     break;
                 case 1:
+                    Collections.sort(replist, RePawnerList.Most_Reviews);
+                    ra.notifyDataSetChanged();
                     break;
                 case 2:
-                    break;
-                case 3:
-                    Collections.sort(replist, RePawnerList.Name_Compare);
+                    Collections.sort(replist, RePawnerList.Most_Rated);
                     ra.notifyDataSetChanged();
                     break;
             }
