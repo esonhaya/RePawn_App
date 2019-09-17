@@ -6,9 +6,13 @@
     tools:context=".Home.Search.Products">
 
     <!-- TODO: Update blank fragment layout -->
-
+    <com.jaredrummler.materialspinner.MaterialSpinner
+        android:id="@+id/pawnshop_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/pawnshop_view"
+        android:layout_marginTop="50dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

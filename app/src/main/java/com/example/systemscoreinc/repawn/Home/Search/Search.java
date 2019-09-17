@@ -51,6 +51,7 @@ public class Search extends AppCompatActivity implements SearchView.OnQueryTextL
     Bundle extra;
     Intent i;
     MaterialSpinner rs;
+    MaterialSpinner ps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +116,26 @@ public class Search extends AppCompatActivity implements SearchView.OnQueryTextL
         pawn_view.setHasFixedSize(true);
         pawn_view.setLayoutManager(new GridLayoutManager(context, 1));
         pawn_view.setAdapter(hpa);
+        ps = rootView.findViewById(R.id.pawnshop_spinner);
+        ps.setItems("Sort by Popularity", "Sort by Most Reviewed", "Sort by Most Rated");
+        ps.setOnItemSelectedListener((view, position, id, item) -> {
+
+            switch (position) {
+                case 0:
+                    Collections.sort(poplist, PopularList.Follow_Compare);
+                    hpa.notifyDataSetChanged();
+                    break;
+                case 1:
+                    Collections.sort(poplist, PopularList.Most_Reviews);
+                    hpa.notifyDataSetChanged();
+                    break;
+                case 2:
+                    Collections.sort(poplist, PopularList.Most_Rated);
+                    hpa.notifyDataSetChanged();
+                    break;
+            }
+
+        });
     }
 
     public void getProducts(View rootView) {
@@ -125,6 +146,7 @@ public class Search extends AppCompatActivity implements SearchView.OnQueryTextL
         prod_view.setHasFixedSize(true);
         prod_view.setLayoutManager(new GridLayoutManager(context, 2));
         prod_view.setAdapter(hia);
+
 
     }
 

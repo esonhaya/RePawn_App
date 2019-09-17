@@ -310,7 +310,11 @@ public class Pawnshop_Page extends AppCompatActivity {
                             pawnshop_description.setText(pawnshop_object.getString("Pawnshop_description"));
                             int ratings_total = pawnshop_object.getInt("ratings_total");
                             int ratings_count = pawnshop_object.getInt("ratings_count");
-                            pawnshop_rating.setText(String.valueOf(ratings_total / ratings_count));
+                            int avg_ratings = 0;
+                            if (ratings_total != 0) {
+                                avg_ratings = ratings_total / ratings_count;
+                            }
+                            pawnshop_rating.setText(String.valueOf(avg_ratings));
                             pawnshop_review_count.setText(String.valueOf(ratings_count));
                             pawnshop_contact.setText("Contact: " + pawnshop_object.getString("Pawnshop_contact"));
                             pawnshop_address.setText("Address: " + pawnshop_object.getString("Pawnshop_address"));

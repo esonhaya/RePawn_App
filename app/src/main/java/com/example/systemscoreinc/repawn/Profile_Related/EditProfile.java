@@ -245,11 +245,8 @@ public class EditProfile extends AppCompatActivity {
                 MDToast.makeText(context, response, MDToast.LENGTH_LONG, MDToast.TYPE_INFO).show();
                 finish();
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+        }, error -> {
 
-            }
         }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
@@ -328,7 +325,7 @@ public class EditProfile extends AppCompatActivity {
                 fage = age;
 
             }
-        }, y, m, d);
+        }, y, m-1, d);
     }
 
     private View.OnClickListener edit_prof_listener = new View.OnClickListener() {

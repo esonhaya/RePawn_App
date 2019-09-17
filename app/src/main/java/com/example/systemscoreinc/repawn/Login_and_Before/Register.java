@@ -21,6 +21,8 @@ import com.example.systemscoreinc.repawn.IpConfig;
 import com.example.systemscoreinc.repawn.R;
 import com.example.systemscoreinc.repawn.Session;
 import com.example.systemscoreinc.repawn.Utils;
+import com.github.tntkhang.gmailsenderlibrary.GMailSender;
+import com.github.tntkhang.gmailsenderlibrary.GmailListener;
 import com.squareup.picasso.Picasso;
 import com.valdesekamdem.library.mdtoast.MDToast;
 
@@ -35,7 +37,7 @@ public class Register extends AppCompatActivity {
     String getID;
     int fage, y = 1990, m = 2, d = 1;
     IpConfig ip = new IpConfig();
-    String url = ip.getUrl()+"account.php";
+    String url = ip.getUrl() + "account.php";
     EditText fname, lname, mname, email, con, pass, datetext;
     MaterialButton datebutton, sign_up;
     TextInputLayout email_layout;
@@ -49,6 +51,7 @@ public class Register extends AppCompatActivity {
     private Bitmap bitmap;
     private Uri filePath;
     String filename, image, filepath;
+    String message;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,23 +60,18 @@ public class Register extends AppCompatActivity {
 
         //    String url="192.168.8.100/RePawn/add_user.php";
         get_this();
-        sign_up.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                check_errors();
-                if (noErrors) {
-                    register();
-                }
+        sign_up.setOnClickListener(v -> {
+            check_errors();
+            if (noErrors) {
+                register();
             }
         });
 
         TextView tagr = this.findViewById(R.id.terms_agreement);
-        tagr.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //navigateTo(new TermsConditions(), true);
-                Intent to_tac = new Intent(Register.this, TermsConditions.class);
-                startActivity(to_tac);
-            }
+        tagr.setOnClickListener(v -> {
+            //navigateTo(new TermsConditions(), true);
+            Intent to_tac = new Intent(Register.this, TermsConditions.class);
+            startActivity(to_tac);
         });
 
         final DatePickerDialog dpd = new DatePickerDialog(this, AlertDialog.THEME_DEVICE_DEFAULT_DARK, new DatePickerDialog.OnDateSetListener() {
@@ -95,14 +93,11 @@ public class Register extends AppCompatActivity {
 
             }
         }, y, m - 1, d);
-        datebutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        datebutton.setOnClickListener(v -> {
 
-                dpd.getDatePicker().setMaxDate(new Date().getTime());
-                dpd.updateDate(y, m, d);
-                dpd.show();
-            }
+            dpd.getDatePicker().setMaxDate(new Date().getTime());
+            dpd.updateDate(y, m, d);
+            dpd.show();
         });
 
     }
@@ -140,24 +135,20 @@ public class Register extends AppCompatActivity {
 
     public void register() {
         image = imageToString(bitmap);
-     //   Log.e("image",image);
-        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                if (response.equals("1")) {
-                    email_layout.setError(getResources().getString(R.string.shr_error_email_reg_used));
-                } else {
-                    //   getID(email.getText().toString(), context);
-                    MDToast.makeText(context, response, MDToast.LENGTH_LONG, MDToast.TYPE_SUCCESS).show();
-                    Intent to_log=new Intent(Register.this,LoginActivity.class);
-                    startActivity(to_log);
-                }
+        //   Log.e("image",image);
+        StringRequest request = new StringRequest(Request.Method.POST, url, response -> {
+            if (response.equals("1")) {
+                MDToast.makeText(context, "Either your email or contact # is already been used", MDToast.LENGTH_LONG,
+                        MDToast.TYPE_ERROR).show();
+            } else {
+                //   getID(email.getText().toString(), context);
+                gen_code();
+                MDToast.makeText(context, response, MDToast.LENGTH_LONG, MDToast.TYPE_SUCCESS).show();
+                Intent to_log = new Intent(Register.this, LoginActivity.class);
+                startActivity(to_log);
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+        }, error -> {
 
-            }
         }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
@@ -175,6 +166,44 @@ public class Register extends AppCompatActivity {
             }
         };
         rq.add(request);
+
+    }
+
+    public void gen_code() {
+        StringRequest request = new StringRequest(Request.Method.POST, url, response -> {
+            send_email(response);
+        }, error -> {
+
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("gen_code", "1");
+                params.put("email", email.getText().toString());
+                return params;
+            }
+        };
+        rq.add(request);
+    }
+
+    private void send_email(String response) {
+        GMailSender.withAccount("jeebsonhaya3@gmail.com", "fairytail1234")
+                .withTitle("RePawn Access Code")
+                .withBody("Your access code is " + response)
+                .withSender(getString(R.string.app_name))
+                .toEmailAddress(email.getText().toString()) // one or multiple addresses separated by a comma
+                .withListenner(new GmailListener() {
+                    @Override
+                    public void sendSuccess() {
+                        Toast.makeText(Register.this, "Success", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void sendFail(String err) {
+                        Toast.makeText(Register.this, "Fail: " + err, Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .send();
     }
 
     public void check_errors() {
@@ -199,9 +228,9 @@ public class Register extends AppCompatActivity {
             email_layout.setError("invalid email");
             noErrors = false;
         }
-        if(bitmap==null){
-            MDToast.makeText(context,"Please set up your profile picture",MDToast.LENGTH_SHORT,MDToast.TYPE_ERROR).show();
-       noErrors=false;
+        if (bitmap == null) {
+            MDToast.makeText(context, "Please set up your profile picture", MDToast.LENGTH_SHORT, MDToast.TYPE_ERROR).show();
+            noErrors = false;
         }
     }
 
@@ -290,6 +319,7 @@ public class Register extends AppCompatActivity {
         byte[] imgBytes = byteArrayOutputStream.toByteArray();
         return Base64.encodeToString(imgBytes, Base64.DEFAULT);
     }
+
     boolean isEmailValid(CharSequence email) {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }

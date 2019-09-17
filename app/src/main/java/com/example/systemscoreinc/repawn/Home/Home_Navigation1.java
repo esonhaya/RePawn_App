@@ -22,24 +22,18 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.SearchView;
-import android.widget.TextView;
-import android.widget.Toast;
-
+import android.widget.*;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.systemscoreinc.repawn.Home.Category.CategoryList;
 import com.example.systemscoreinc.repawn.Home.Category.Home_Cat_Adapter;
 import com.example.systemscoreinc.repawn.Home.Items.Home_Items_Adapter;
+import com.example.systemscoreinc.repawn.Home.Notifications.Notifications;
 import com.example.systemscoreinc.repawn.Home.Pawnshops.All_Pawnshops.All_Pawnshops;
 import com.example.systemscoreinc.repawn.Home.Pawnshops.Home_Pawnshops_Adapter;
 import com.example.systemscoreinc.repawn.Home.Pawnshops.PopularList;
@@ -59,7 +53,6 @@ import com.glide.slider.library.SliderLayout;
 import com.glide.slider.library.SliderTypes.BaseSliderView;
 import com.glide.slider.library.SliderTypes.TextSliderView;
 import com.glide.slider.library.Tricks.ViewPagerEx;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -120,9 +113,9 @@ public class Home_Navigation1 extends AppCompatActivity implements BaseSliderVie
 
     public void all_onclick() {
         pawnshop_all.setOnClickListener(v -> {
-                Intent to_pawnshops = new Intent(Home_Navigation1.this, All_Pawnshops.class);
-                to_pawnshops.putExtra("pawnshops", (ArrayList<PopularList>) pawnshop_list);
-                startActivity(to_pawnshops);
+            Intent to_pawnshops = new Intent(Home_Navigation1.this, All_Pawnshops.class);
+            to_pawnshops.putExtra("pawnshops", (ArrayList<PopularList>) pawnshop_list);
+            startActivity(to_pawnshops);
 
         });
         remats_all.setOnClickListener(v -> {
@@ -157,9 +150,10 @@ public class Home_Navigation1 extends AppCompatActivity implements BaseSliderVie
                             to_prof.putExtra("user_id", session.getID());
                             startActivity(to_prof);
                             break;
+                        case R.id.nav_notif:
+                            Intent to_notif = new Intent(Home_Navigation1.this, Notifications.class);
+                            to_notif.putExtra("user_id", session.getID());
                         case R.id.nav_items:
-//                                Intent to_pawned=new Intent(Home_Navigation1.this, Pawned.class);
-//                                startActivity(to_pawned);
                             startActivity(new Intent(Home_Navigation1.this, Pawned.class));
                             break;
                         case R.id.nav_orders:
@@ -210,29 +204,26 @@ public class Home_Navigation1 extends AppCompatActivity implements BaseSliderVie
     }
 
     private void addRepawners() {
-        StringRequest preq = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    //extracting json array from response string
-                    JSONArray cats = jsonObject.getJSONArray("repawners");
-                    Log.e("jsondata", String.valueOf(cats));
-                    if (cats.length() > 0) {
-                        for (int i = 0; i < cats.length(); i++) {
-                            JSONObject cc = cats.getJSONObject(i);
+        StringRequest preq = new StringRequest(Request.Method.POST, url, response -> {
+            try {
+                JSONObject jsonObject = new JSONObject(response);
+                //extracting json array from response string
+                JSONArray cats = jsonObject.getJSONArray("repawners");
+                Log.e("jsondata", String.valueOf(cats));
+                if (cats.length() > 0) {
+                    for (int i = 0; i < cats.length(); i++) {
+                        JSONObject cc = cats.getJSONObject(i);
 
-                            RePawnerList rp = new RePawnerList(cc.getString("RePawner_name"), cc.getString("user_image"),
-                                    cc.getInt("User_ID"), cc.getInt("ratings_count"), cc.getInt("ratings_total"),
-                                    cc.getInt("follow_count"));
+                        RePawnerList rp = new RePawnerList(cc.getString("RePawner_name"), cc.getString("user_image"),
+                                cc.getInt("User_ID"), cc.getInt("ratings_count"), cc.getInt("ratings_total"),
+                                cc.getInt("follow_count"));
 
-                            rep_list.add(rp);
-                        }
-                        rep_adapter.notifyDataSetChanged();
+                        rep_list.add(rp);
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    rep_adapter.notifyDataSetChanged();
                 }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
         }, error -> {
         }) {
@@ -247,28 +238,25 @@ public class Home_Navigation1 extends AppCompatActivity implements BaseSliderVie
 
     private void addMainCatRV() {
 
-        StringRequest preq = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    //extracting json array from response string
-                    JSONArray cats = jsonObject.getJSONArray("category");
-                    Log.e("jsondata", String.valueOf(cats));
-                    if (cats.length() > 0) {
-                        for (int i = 0; i < cats.length(); i++) {
-                            JSONObject cc = cats.getJSONObject(i);
+        StringRequest preq = new StringRequest(Request.Method.POST, url, response -> {
+            try {
+                JSONObject jsonObject = new JSONObject(response);
+                //extracting json array from response string
+                JSONArray cats = jsonObject.getJSONArray("category");
+                Log.e("jsondata", String.valueOf(cats));
+                if (cats.length() > 0) {
+                    for (int i = 0; i < cats.length(); i++) {
+                        JSONObject cc = cats.getJSONObject(i);
 
-                            CategoryList clist = new CategoryList(cc.getString("Category_name"),
-                                    cc.getInt("Category_ID"), cc.getInt("cat_count"));
+                        CategoryList clist = new CategoryList(cc.getString("Category_name"),
+                                cc.getInt("Category_ID"), cc.getInt("cat_count"));
 
-                            cat_list.add(clist);
-                        }
-                        cats_adapter.notifyDataSetChanged();
+                        cat_list.add(clist);
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    cats_adapter.notifyDataSetChanged();
                 }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
         }, error -> {
         }) {
@@ -283,38 +271,32 @@ public class Home_Navigation1 extends AppCompatActivity implements BaseSliderVie
 
     private void addPromotedItemsRecycleView() {
 
-        StringRequest preq = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONObject object = new JSONObject(response);
-                    //extracting json array from response string
-                    JSONArray items_array = object.getJSONArray("all_items");
-                    if (items_array.length() > 0) {
-                        for (int i = 0; i < items_array.length(); i++) {
-                            JSONObject items_object = items_array.getJSONObject(i);
-                            ItemList item = new ItemList(items_object.getString("Product_name"),
-                                    items_object.getString("Date_Added"), items_object.getString("seller_name")
-                                    , items_object.getString("Category_name"), items_object.getString("Product_Type"),
-                                    items_object.getString("Product_image"), items_object.getString("Product_description")
-                                    , items_object.getInt("Promoted"), items_object.getInt("Reserved"), items_object.getInt("Ordered"), items_object.getInt("Product_ID"),
-                                    items_object.getInt("User_ID"), items_object.getInt("Reservable"), items_object.getInt("Image_ID"),
-                                    items_object.getLong("Product_price"));
-                            item_list.add(item);
-                        }
-                        items_adapter.notifyDataSetChanged();
+        StringRequest preq = new StringRequest(Request.Method.POST, url, response -> {
+            try {
+                JSONObject object = new JSONObject(response);
+                //extracting json array from response string
+                JSONArray items_array = object.getJSONArray("all_items");
+                if (items_array.length() > 0) {
+                    for (int i = 0; i < items_array.length(); i++) {
+                        JSONObject items_object = items_array.getJSONObject(i);
+                        ItemList item = new ItemList(items_object.getString("Product_name"),
+                                items_object.getString("Date_Added"), items_object.getString("seller_name")
+                                , items_object.getString("Category_name"), items_object.getString("Product_Type"),
+                                items_object.getString("Product_image"), items_object.getString("Product_description")
+                                , items_object.getInt("Promoted"), items_object.getInt("Reserved"), items_object.getInt("Ordered"), items_object.getInt("Product_ID"),
+                                items_object.getInt("User_ID"), items_object.getInt("Reservable"), items_object.getInt("Image_ID"),
+                                items_object.getLong("Product_price"));
+                        item_list.add(item);
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    items_adapter.notifyDataSetChanged();
                 }
-
-
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
 
-            }
+
+        }, error -> {
+
         }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
@@ -354,11 +336,7 @@ public class Home_Navigation1 extends AppCompatActivity implements BaseSliderVie
                 }
             }
 
-        }, new Response.ErrorListener() {
-            public final void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-            }
-        }) {
+        }, error -> error.printStackTrace()) {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("get_all_pawnshops", "1");

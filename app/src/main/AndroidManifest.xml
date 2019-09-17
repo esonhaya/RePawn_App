@@ -18,7 +18,7 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
+    <uses-permission android:name="android.permission.SEND_SMS"/>
     <meta-data
         android:name="com.google.android.geo.API_KEY"
         android:value="AIzaSyAxmvL3E9ghrb-T8zQKymoMi9KYoVW0fQ0" />
@@ -93,5 +93,6 @@
             android:name=".Items.Edit_Pawned_Info"
             android:theme="@style/AppTheme." />
     </application>
+
 
 </manifest>
