@@ -17,7 +17,7 @@ import com.example.systemscoreinc.repawn.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Notifications extends AppCompatActivity{
+public class Notifications extends AppCompatActivity {
 
     private Toolbar toolbar;
     private TabLayout tabLayout;
@@ -81,10 +81,14 @@ public class Notifications extends AppCompatActivity{
 //        });
     }
 
+    public void getNew_Notif(View rootView) {
+
+    }
+
     private void setupViewPager(ViewPager viewPager) {
-    ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-    //    adapter.addFragment(new New_Notifications(), "NEW");
-     //   adapter.addFragment(new Checked_Notifications(), "CHECKED");
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new New_Notifications(), "NEW");
+        //   adapter.addFragment(new Checked_Notifications(), "CHECKED");
         viewPager.setAdapter(adapter);
     }
 

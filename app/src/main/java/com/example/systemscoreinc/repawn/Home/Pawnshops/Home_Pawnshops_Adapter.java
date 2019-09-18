@@ -26,11 +26,6 @@ public class Home_Pawnshops_Adapter extends RecyclerView.Adapter<Home_Pawnshop_V
     private Context Ctx;
     IpConfig ip = new IpConfig();
     private ArrayList<PopularList> arraylist;
-    // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
-    // you provide access to all the views for a data item in a view holder
-
-    // Provide a suitable constructor (depends on the kind of dataset)
     public Home_Pawnshops_Adapter(Context context, List<PopularList> myDataset) {
         mDataset = myDataset;
         Ctx = context;
