@@ -151,31 +151,16 @@ public class Pawnshop_Page extends AppCompatActivity {
         btn_unfollow.setOnClickListener(pawnshop_click_listener);
         Follow_ID = this.findViewById(R.id.Follow_ID);
         btn_delete = this.findViewById(R.id.btn_delete);
-        btn_delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                delete_feedback();
-                finish();
-                overridePendingTransition(0, 0);
-                startActivity(getIntent());
-                overridePendingTransition(0, 0);
-            }
-        });
+        btn_delete.setOnClickListener(pawnshop_click_listener);
 
     }
 
     private void delete_feedback() {
-        StringRequest follow_status = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                MDToast.makeText(context, response, MDToast.LENGTH_LONG, MDToast.TYPE_SUCCESS).show();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+        StringRequest follow_status = new StringRequest(Request.Method.POST, url,
+                response -> MDToast.makeText(context, response, MDToast.LENGTH_LONG, MDToast.TYPE_SUCCESS).show(),
+                error -> {
 
-            }
-        }) {
+                }) {
 
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
@@ -189,33 +174,27 @@ public class Pawnshop_Page extends AppCompatActivity {
     }
 
     private void get_repawner_review() {
-        StringRequest get_pawnshop_info = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
+        StringRequest get_pawnshop_info = new StringRequest(Request.Method.POST, url, response -> {
+            try {
 
-                    JSONObject result_object = new JSONObject(response);
-                    //extracting json array from response string
-                    JSONArray rep_feedback_array = result_object.getJSONArray("repawner_feedback");
-                    Log.e("jsondata", String.valueOf(rep_feedback_array));
-                    if (rep_feedback_array.length() > 0) {
-                        update_feedback = 1;
-                        JSONObject feedback_object = rep_feedback_array.getJSONObject(0);
-                        review_bar.setRating(feedback_object.getLong("Rating"));
-                        feedback_content.setText(feedback_object.getString("Feedback"));
-                        feedback_content.setTextColor(getResources().getColor(R.color.colorDGray));
-                    }
-
-                } catch (JSONException e1) {
-
-
+                JSONObject result_object = new JSONObject(response);
+                //extracting json array from response string
+                JSONArray rep_feedback_array = result_object.getJSONArray("repawner_feedback");
+                Log.e("jsondata", String.valueOf(rep_feedback_array));
+                if (rep_feedback_array.length() > 0) {
+                    update_feedback = 1;
+                    JSONObject feedback_object = rep_feedback_array.getJSONObject(0);
+                    review_bar.setRating(feedback_object.getLong("Rating"));
+                    feedback_content.setText(feedback_object.getString("Feedback"));
+                    feedback_content.setTextColor(getResources().getColor(R.color.colorDGray));
                 }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+
+            } catch (JSONException e1) {
+
 
             }
+        }, error -> {
+
         }) {
 
             protected Map<String, String> getParams() throws AuthFailureError {
@@ -235,47 +214,41 @@ public class Pawnshop_Page extends AppCompatActivity {
         LinearLayoutManager Pawnshops_layout = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
         Items_View.setLayoutManager(Pawnshops_layout);
         Items_View.setAdapter(items_adapter);
-        StringRequest get_pawnshop_info = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
+        StringRequest get_pawnshop_info = new StringRequest(Request.Method.POST, url, response -> {
+            try {
 
-                    JSONObject result_object = new JSONObject(response);
-                    //extracting json array from response string
-                    JSONArray items_array = result_object.getJSONArray("seller_items");
-                    Log.e("jsondata", String.valueOf(items_array));
-                    if (items_array.length() > 0) {
-                        for (int i = 0; i < items_array.length(); i++) {
-                            JSONObject items_object = items_array.getJSONObject(i);
-                            ItemList item = new ItemList(items_object.getString("Product_name"),
-                                    items_object.getString("Date_Added"), items_object.getString("seller_name")
-                                    , items_object.getString("Category_name"), items_object.getString("Product_Type"),
-                                    items_object.getString("Product_image"), items_object.getString("Product_description")
-                                    , items_object.getInt("Promoted"), items_object.getInt("Reserved"), items_object.getInt("Ordered"), items_object.getInt("Product_ID"),
-                                    user_id, items_object.getInt("Reservable"), items_object.getInt("Image_ID"),
-                                    items_object.getLong("Product_price"));
-                            if (i > 5) {
-                                see_all_products.setVisibility(View.VISIBLE);
-                            }
-                            itemlist.add(item);
-
+                JSONObject result_object = new JSONObject(response);
+                //extracting json array from response string
+                JSONArray items_array = result_object.getJSONArray("seller_items");
+                Log.e("jsondata", String.valueOf(items_array));
+                if (items_array.length() > 0) {
+                    for (int i = 0; i < items_array.length(); i++) {
+                        JSONObject items_object = items_array.getJSONObject(i);
+                        ItemList item = new ItemList(items_object.getString("Product_name"),
+                                items_object.getString("Date_Added"), items_object.getString("seller_name")
+                                , items_object.getString("Category_name"), items_object.getString("Product_Type"),
+                                items_object.getString("Product_image"), items_object.getString("Product_description")
+                                , items_object.getInt("Promoted"), items_object.getInt("Reserved"), items_object.getInt("Ordered"), items_object.getInt("Product_ID"),
+                                user_id, items_object.getInt("Reservable"), items_object.getInt("Image_ID"),
+                                items_object.getLong("Product_price"));
+                        if (i > 5) {
+                            see_all_products.setVisibility(View.VISIBLE);
                         }
-                        items_adapter.notifyDataSetChanged();
-                        no_items_prompt.setVisibility(View.GONE);
-                    } else {
-                        no_items_prompt.setVisibility(View.VISIBLE);
+                        itemlist.add(item);
 
                     }
+                    items_adapter.notifyDataSetChanged();
+                    no_items_prompt.setVisibility(View.GONE);
+                } else {
+                    no_items_prompt.setVisibility(View.VISIBLE);
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
 
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
+        }, error -> {
+
         }) {
 
             protected Map<String, String> getParams() throws AuthFailureError {
@@ -291,53 +264,47 @@ public class Pawnshop_Page extends AppCompatActivity {
     }
 
     private void get_Pawnshop_info() {
-        StringRequest get_pawnshop_info = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
+        StringRequest get_pawnshop_info = new StringRequest(Request.Method.POST, url, response -> {
+            try {
 
-                    JSONObject result_object = new JSONObject(response);
+                JSONObject result_object = new JSONObject(response);
 
-                    //extracting json array from response string
-                    JSONArray pawnshop_array = result_object.getJSONArray("pawnshop_info");
-                    if (pawnshop_array.length() > 0) {
-                        for (int i = 0; i < pawnshop_array.length(); i++) {
-                            JSONObject pawnshop_object = pawnshop_array.getJSONObject(i);
-                            lat = pawnshop_object.getDouble("latitude");
-                            lng = pawnshop_object.getDouble("longitude");
-                            pname = pawnshop_object.getString("Pawnshop_name");
-                            pawnshop_name.setText(pname);
-                            pawnshop_description.setText(pawnshop_object.getString("Pawnshop_description"));
-                            int ratings_total = pawnshop_object.getInt("ratings_total");
-                            int ratings_count = pawnshop_object.getInt("ratings_count");
-                            int avg_ratings = 0;
-                            if (ratings_total != 0) {
-                                avg_ratings = ratings_total / ratings_count;
-                            }
-                            pawnshop_rating.setText(String.valueOf(avg_ratings));
-                            pawnshop_review_count.setText(String.valueOf(ratings_count));
-                            pawnshop_contact.setText("Contact: " + pawnshop_object.getString("Pawnshop_contact"));
-                            pawnshop_address.setText("Address: " + pawnshop_object.getString("Pawnshop_address"));
-                            pawnshop_email.setText("Email: " + pawnshop_object.getString("Pawnshop_email"));
-                            pawnshop_followers.setText(pawnshop_object.getString("follow_count") + " followers");
-                            pawnshop_followers.setText(pawnshop_object.getString("follow_count") + " followers");
-                            pawnshop_sold.setText(pawnshop_object.getString("items_sold") + " sold");
-                            follower_id = pawnshop_object.getInt("Followed_ID");
-                            user_image = pawnshop_object.getString("user_image");
-                            Follow_ID.setText("" + follower_id);
-                            Log.d("follower_id", String.valueOf(follower_id));
-                            check_if_following();
+                //extracting json array from response string
+                JSONArray pawnshop_array = result_object.getJSONArray("pawnshop_info");
+                if (pawnshop_array.length() > 0) {
+                    for (int i = 0; i < pawnshop_array.length(); i++) {
+                        JSONObject pawnshop_object = pawnshop_array.getJSONObject(i);
+                        lat = pawnshop_object.getDouble("latitude");
+                        lng = pawnshop_object.getDouble("longitude");
+                        pname = pawnshop_object.getString("Pawnshop_name");
+                        pawnshop_name.setText(pname);
+                        pawnshop_description.setText(pawnshop_object.getString("Pawnshop_description"));
+                        int ratings_total = pawnshop_object.getInt("ratings_total");
+                        int ratings_count = pawnshop_object.getInt("ratings_count");
+                        int avg_ratings = 0;
+                        if (ratings_total != 0) {
+                            avg_ratings = ratings_total / ratings_count;
                         }
+                        pawnshop_rating.setText(String.valueOf(avg_ratings));
+                        pawnshop_review_count.setText(String.valueOf(ratings_count));
+                        pawnshop_contact.setText("Contact: " + pawnshop_object.getString("Pawnshop_contact"));
+                        pawnshop_address.setText("Address: " + pawnshop_object.getString("Pawnshop_address"));
+                        pawnshop_email.setText("Email: " + pawnshop_object.getString("Pawnshop_email"));
+                        pawnshop_followers.setText(pawnshop_object.getString("follow_count") + " followers");
+                        pawnshop_followers.setText(pawnshop_object.getString("follow_count") + " followers");
+                        pawnshop_sold.setText(pawnshop_object.getString("items_sold") + " sold");
+                        follower_id = pawnshop_object.getInt("Followed_ID");
+                        user_image = pawnshop_object.getString("user_image");
+                        Follow_ID.setText("" + follower_id);
+                        Log.d("follower_id", String.valueOf(follower_id));
+                        check_if_following();
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+        }, error -> {
 
-            }
         }) {
 
             protected Map<String, String> getParams() throws AuthFailureError {
@@ -407,6 +374,13 @@ public class Pawnshop_Page extends AppCompatActivity {
                     Intent to_more_feedback = new Intent(context, Feedback_Ratings.class);
                     to_more_feedback.putExtra("feedback_list", (ArrayList<Feedback_Ratings_List>) fratingslist);
                     context.startActivity(to_more_feedback);
+                case R.id.btn_delete:
+                    delete_feedback();
+                    finish();
+                    overridePendingTransition(0, 0);
+                    startActivity(getIntent());
+                    overridePendingTransition(0, 0);
+                    break;
                 default:
                     break;
 
@@ -422,17 +396,11 @@ public class Pawnshop_Page extends AppCompatActivity {
     }
 
     public void post_feedback() {
-        StringRequest get_pawnshop_info = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                MDToast mdToast = MDToast.makeText(context, response, MDToast.LENGTH_SHORT, MDToast.TYPE_SUCCESS);
-                mdToast.show();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+        StringRequest get_pawnshop_info = new StringRequest(Request.Method.POST, url, response -> {
+            MDToast mdToast = MDToast.makeText(context, response, MDToast.LENGTH_SHORT, MDToast.TYPE_SUCCESS);
+            mdToast.show();
+        }, error -> {
 
-            }
         }) {
 
             protected Map<String, String> getParams() throws AuthFailureError {
@@ -456,45 +424,39 @@ public class Pawnshop_Page extends AppCompatActivity {
         LinearLayoutManager FRatings_layout = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         FRatings_View.setLayoutManager(FRatings_layout);
         FRatings_View.setAdapter(fratings_adapter);
-        StringRequest get_feedback_ratings = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                JSONObject result_object = null;
-                try {
-                    result_object = new JSONObject(response);
+        StringRequest get_feedback_ratings = new StringRequest(Request.Method.POST, url, response -> {
+            JSONObject result_object = null;
+            try {
+                result_object = new JSONObject(response);
 
-                    //extracting json array from response string
+                //extracting json array from response string
 
-                    JSONArray feedback_array = result_object.getJSONArray("feedback_ratings");
-                    Log.e("array", String.valueOf(feedback_array));
-                    if (feedback_array.length() > 0) {
-                        for (int i = 0; i < feedback_array.length(); i++) {
-                            JSONObject feedback_object = feedback_array.getJSONObject(i);
-                            Feedback_Ratings_List fratings = new Feedback_Ratings_List(feedback_object.getString
-                                    ("RePawner_Fname") + " " + feedback_object.getString("RePawner_Lname"),
-                                    feedback_object.getString("Date_Added"), feedback_object.getString
-                                    ("Feedback"), feedback_object.getString("Rating"),
-                                    feedback_object.getString("user_image"));
-                            fratingslist.add(fratings);
-                            if (i <= 5) {
-                                fratingslist_min.add(fratings);
-                            }
+                JSONArray feedback_array = result_object.getJSONArray("feedback_ratings");
+                Log.e("array", String.valueOf(feedback_array));
+                if (feedback_array.length() > 0) {
+                    for (int i = 0; i < feedback_array.length(); i++) {
+                        JSONObject feedback_object = feedback_array.getJSONObject(i);
+                        Feedback_Ratings_List fratings = new Feedback_Ratings_List(feedback_object.getString
+                                ("RePawner_Fname") + " " + feedback_object.getString("RePawner_Lname"),
+                                feedback_object.getString("Date_Added"), feedback_object.getString
+                                ("Feedback"), feedback_object.getString("Rating"),
+                                feedback_object.getString("user_image"));
+                        fratingslist.add(fratings);
+                        if (i <= 5) {
+                            fratingslist_min.add(fratings);
                         }
-                        if (fratingslist.size() > 5) {
-                            see_others.setVisibility(View.VISIBLE);
-                        }
-                        fratings_adapter.notifyDataSetChanged();
-                        no_feedbacks_prompt.setVisibility(View.GONE);
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    if (fratingslist.size() > 5) {
+                        see_others.setVisibility(View.VISIBLE);
+                    }
+                    fratings_adapter.notifyDataSetChanged();
+                    no_feedbacks_prompt.setVisibility(View.GONE);
                 }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+        }, error -> {
 
-            }
         }) {
 
             protected Map<String, String> getParams() throws AuthFailureError {
@@ -510,19 +472,13 @@ public class Pawnshop_Page extends AppCompatActivity {
     }
 
     public void follow_function(final int follow) {
-        StringRequest follow_pawnshop = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
+        StringRequest follow_pawnshop = new StringRequest(Request.Method.POST, url, response -> {
 
-                MDToast.makeText(context, response, MDToast.LENGTH_SHORT, MDToast.TYPE_INFO).show();
-                resetActivity();
+            MDToast.makeText(context, response, MDToast.LENGTH_SHORT, MDToast.TYPE_INFO).show();
+            resetActivity();
 
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+        }, error -> {
 
-            }
         }) {
 
             protected Map<String, String> getParams() throws AuthFailureError {
@@ -530,6 +486,7 @@ public class Pawnshop_Page extends AppCompatActivity {
                 params.put("follow_this", "1");
                 params.put("followed_id", String.valueOf(follower_id));
                 params.put("user_id", String.valueOf(session.getID()));
+                params.put("seller_id", String.valueOf(user_id));
                 params.put("to_follow", String.valueOf(follow));
 
                 return params;

@@ -1,15 +1,20 @@
 package com.example.systemscoreinc.repawn.Home;
 
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -26,7 +31,6 @@ import android.widget.*;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.request.RequestOptions;
@@ -34,6 +38,7 @@ import com.example.systemscoreinc.repawn.Home.Category.CategoryList;
 import com.example.systemscoreinc.repawn.Home.Category.Home_Cat_Adapter;
 import com.example.systemscoreinc.repawn.Home.Items.Home_Items_Adapter;
 import com.example.systemscoreinc.repawn.Home.Notifications.Notifications;
+import com.example.systemscoreinc.repawn.Home.Notifications.Notifications_List;
 import com.example.systemscoreinc.repawn.Home.Pawnshops.All_Pawnshops.All_Pawnshops;
 import com.example.systemscoreinc.repawn.Home.Pawnshops.Home_Pawnshops_Adapter;
 import com.example.systemscoreinc.repawn.Home.Pawnshops.PopularList;
@@ -53,6 +58,8 @@ import com.glide.slider.library.SliderLayout;
 import com.glide.slider.library.SliderTypes.BaseSliderView;
 import com.glide.slider.library.SliderTypes.TextSliderView;
 import com.glide.slider.library.Tricks.ViewPagerEx;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -75,6 +82,7 @@ public class Home_Navigation1 extends AppCompatActivity implements BaseSliderVie
     List<ItemList> item_list = new ArrayList<>();
     List<CategoryList> cat_list = new ArrayList<>();
     List<RePawnerList> rep_list = new ArrayList<>();
+    List<Notifications_List> new_notif = new ArrayList<>();
     RecyclerView pawnshop_view, item_view, cat_view, rep_view;
     NavigationView navigationView;
     Context context;
@@ -84,6 +92,9 @@ public class Home_Navigation1 extends AppCompatActivity implements BaseSliderVie
     Home_Cat_Adapter cats_adapter;
     RePawner_Adapter rep_adapter;
     RequestQueue rq;
+    Bitmap largeIcon;
+    PendingIntent pendingIntent;
+    TextView notifView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,17 +109,19 @@ public class Home_Navigation1 extends AppCompatActivity implements BaseSliderVie
         mDemoSlider = findViewById(R.id.slider);
         mDrawerLayout = findViewById(R.id.drawer_layout);
         context = this;
-        slidershow();
-        declarestuffs();
         navigationView = findViewById(R.id.nav_view);
-        all_onclick();
         tvEmail = navigationView.getHeaderView(0).findViewById(R.id.email_navigation);
         tvEmail.setText(session.getEmail());
         MenuItem notif = navigationView.getMenu().
                 findItem(R.id.nav_notif);
-        TextView notifView = (TextView) notif.getActionView();
+        notifView = (TextView) notif.getActionView();
         initializeCountDrawer(notifView);
+        slidershow();
+        declarestuffs();
+        all_onclick();
         location_related();
+        new_notif();
+        notify_all();
     }
 
     public void all_onclick() {
@@ -153,6 +166,8 @@ public class Home_Navigation1 extends AppCompatActivity implements BaseSliderVie
                         case R.id.nav_notif:
                             Intent to_notif = new Intent(Home_Navigation1.this, Notifications.class);
                             to_notif.putExtra("user_id", session.getID());
+                            startActivity(to_notif);
+                            break;
                         case R.id.nav_items:
                             startActivity(new Intent(Home_Navigation1.this, Pawned.class));
                             break;
@@ -201,7 +216,86 @@ public class Home_Navigation1 extends AppCompatActivity implements BaseSliderVie
         addPromotedItemsRecycleView();
         addMainCatRV();
         addRepawners();
+
     }
+
+    private void new_notif() {
+        StringRequest preq = new StringRequest(Request.Method.POST, url, response -> {
+            try {
+                JSONObject jsonObject = new JSONObject(response);
+                //extracting json array from response string
+                JSONArray cats = jsonObject.getJSONArray("news");
+                Log.e("jsondata", String.valueOf(cats));
+                if (cats.length() > 0) {
+                    for (int i = 0; i < cats.length(); i++) {
+                        JSONObject cc = cats.getJSONObject(i);
+                        Notifications_List notif = new Notifications_List(cc.getInt("Notification_ID"), cc.getInt("Link_ID"), cc.getInt("Type"),
+                                cc.getInt("checked"), cc.getString("Date_Posted"), cc.getString("image"),
+                                cc.getString("message"));
+                        new_notif.add(notif);
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }, error -> {
+        }) {
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("new_notif", "1");
+                params.put("user_id", String.valueOf(session.getID()));
+                return params;
+            }
+        };
+        rq.add(preq);
+        Log.e("notif size", String.valueOf(new_notif.size()));
+        notifView.setText("" + new_notif.size());
+
+    }
+
+    private void notify_all() {
+        for (Notifications_List cur : new_notif) {
+            // use currInstance
+
+            Target target = new Target() {
+                @Override
+                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                    largeIcon = bitmap;
+                }
+
+                @Override
+                public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+
+                }
+
+                @Override
+                public void onPrepareLoad(Drawable placeHolderDrawable) {
+                }
+            };
+            if (cur.getType() == 1) {
+                Intent notifyIntent = new Intent(this, RePawner_Profile.class);
+                notifyIntent.putExtra("user_id", cur.getLink_id());
+                notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                        | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                pendingIntent = PendingIntent.getActivity(
+                        this, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT
+                );
+            }
+            Picasso.get().load(cur.getNotif_image()).into(target);
+            NotificationCompat.Builder builder =
+                    new NotificationCompat.Builder(this, "chan")
+                            .setSmallIcon(R.mipmap.rp_launcher_round)
+                            .setContentTitle("RePawn")
+                            .setContentText(cur.getMessage())
+                            .setAutoCancel(true)
+                            .setLargeIcon(largeIcon)
+                            .setContentIntent(pendingIntent);
+            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+            notificationManager.notify(23, builder.build());
+        }
+
+    }
+
 
     private void addRepawners() {
         StringRequest preq = new StringRequest(Request.Method.POST, url, response -> {
@@ -311,32 +405,28 @@ public class Home_Navigation1 extends AppCompatActivity implements BaseSliderVie
 
 
     private void addPawnshopRecycleView() {
-        StringRequest preq = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-
-            public void onResponse(String response) {
-                try {
-                    JSONObject object = new JSONObject(response);
-                    //extracting json array from response string
-                    JSONArray items_array = object.getJSONArray("pawnshops");
-                    if (items_array.length() > 0) {
-                        for (int i = 0; i < items_array.length(); i++) {
-                            JSONObject item_object = items_array.getJSONObject(i);
-                            PopularList pawnshop = new PopularList(item_object.getString("Pawnshop_name"),
-                                    item_object.getString("Pawnshop_address"), item_object.getString("activation_date")
-                                    , item_object.getString("user_image"), item_object.getInt("ratings_count"),
-                                    item_object.getInt("User_ID"), item_object.getInt("ratings_total"),
-                                    item_object.getInt("follow_count"), item_object.getDouble("latitude"),
-                                    item_object.getDouble("longitude"));
-                            pawnshop_list.add(pawnshop);
-                        }
-                        pawnshops_adapter.notifyDataSetChanged();
+        StringRequest preq = new StringRequest(Request.Method.POST, url, response -> {
+            try {
+                JSONObject object = new JSONObject(response);
+                //extracting json array from response string
+                JSONArray items_array = object.getJSONArray("pawnshops");
+                if (items_array.length() > 0) {
+                    for (int i = 0; i < items_array.length(); i++) {
+                        JSONObject item_object = items_array.getJSONObject(i);
+                        PopularList pawnshop = new PopularList(item_object.getString("Pawnshop_name"),
+                                item_object.getString("Pawnshop_address"), item_object.getString("activation_date")
+                                , item_object.getString("user_image"), item_object.getInt("ratings_count"),
+                                item_object.getInt("User_ID"), item_object.getInt("ratings_total"),
+                                item_object.getInt("follow_count"), item_object.getDouble("latitude"),
+                                item_object.getDouble("longitude"));
+                        pawnshop_list.add(pawnshop);
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    pawnshops_adapter.notifyDataSetChanged();
                 }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-
-        }, error -> error.printStackTrace()) {
+        }, Throwable::printStackTrace) {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("get_all_pawnshops", "1");
@@ -461,7 +551,8 @@ public class Home_Navigation1 extends AppCompatActivity implements BaseSliderVie
         notif.setGravity(Gravity.CENTER_VERTICAL);
         notif.setTypeface(null, Typeface.BOLD);
         notif.setTextColor(Color.RED);
-        notif.setText("99+");
+        int length = new_notif.size();
+        notif.setText("" + length);
     }
 
     @Override
@@ -478,18 +569,12 @@ public class Home_Navigation1 extends AppCompatActivity implements BaseSliderVie
         final android.support.v7.app.AlertDialog exitdia = new android.support.v7.app.AlertDialog.Builder(this, AlertDialog.THEME_DEVICE_DEFAULT_DARK)
                 .setTitle("Are you sure you want to exit?")
 
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //   Log.d("Rematado_Info", "Sending atomic bombs to Jupiter");
-                        finish();
-                    }
+                .setPositiveButton("OK", (dialog, which) -> {
+                    //   Log.d("Rematado_Info", "Sending atomic bombs to Jupiter");
+                    finish();
                 })
-                .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                .setNegativeButton("CANCEL", (dialog, which) -> {
 
-                    }
                 })
                 .create();
 

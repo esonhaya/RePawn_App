@@ -11,7 +11,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import com.example.systemscoreinc.repawn.ItemList;
 import com.example.systemscoreinc.repawn.R;
 
 import java.util.ArrayList;
@@ -22,7 +21,10 @@ public class Notifications extends AppCompatActivity {
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    List<ItemList> itemlist;
+    List<Notifications_List> new_list;
+    List<Notifications_List> old_list;
+    Notifications_Adapter nadpt;
+    Notifications_Adapter oadpt;
     Context context;
     Bundle extra;
     Intent i;
@@ -39,7 +41,7 @@ public class Notifications extends AppCompatActivity {
         viewPager = findViewById(R.id.viewpager);
         setupViewPager(viewPager);
 
-        getSupportActionBar().setTitle("Search");
+        getSupportActionBar().setTitle("Notifications");
         tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         toolbar.setNavigationOnClickListener(v -> {

@@ -104,7 +104,6 @@ public class RePawner_Profile extends AppCompatActivity {
 
     }
 
-
     private void if_invisible() {
         if (user_id == session.getID()) {
             products_layout.setVisibility(View.GONE);
@@ -397,19 +396,13 @@ public class RePawner_Profile extends AppCompatActivity {
     }
 
     public void follow_function(final int follow) {
-        StringRequest follow_pawnshop = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
+        StringRequest follow_pawnshop = new StringRequest(Request.Method.POST, url, response -> {
 
-                MDToast.makeText(context, response, MDToast.LENGTH_SHORT, MDToast.TYPE_INFO).show();
-                resetActivity();
+            MDToast.makeText(context, response, MDToast.LENGTH_SHORT, MDToast.TYPE_INFO).show();
+            resetActivity();
 
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+        }, error -> {
 
-            }
         }) {
 
             protected Map<String, String> getParams() throws AuthFailureError {
@@ -417,6 +410,7 @@ public class RePawner_Profile extends AppCompatActivity {
                 params.put("follow_this", "1");
                 params.put("followed_id", String.valueOf(followed_id));
                 params.put("user_id", String.valueOf(session.getID()));
+                params.put("seller_id", String.valueOf(user_id));
                 params.put("to_follow", String.valueOf(follow));
 
                 return params;
@@ -487,22 +481,16 @@ public class RePawner_Profile extends AppCompatActivity {
     }
 
     public void getimage() {
-        StringRequest req = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                rep_image = response;
-                Picasso.get()
-                        .load(ip.getUrl_image() + rep_image)
-                        .memoryPolicy(MemoryPolicy.NO_CACHE)
-                        .networkPolicy(NetworkPolicy.NO_CACHE)
-                        .fit()
-                        .into(profile_image);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+        StringRequest req = new StringRequest(Request.Method.POST, url, response -> {
+            rep_image = response;
+            Picasso.get()
+                    .load(ip.getUrl_image() + rep_image)
+                    .memoryPolicy(MemoryPolicy.NO_CACHE)
+                    .networkPolicy(NetworkPolicy.NO_CACHE)
+                    .fit()
+                    .into(profile_image);
+        }, error -> {
 
-            }
         }) {
 
             protected Map<String, String> getParams() throws AuthFailureError {
@@ -517,17 +505,11 @@ public class RePawner_Profile extends AppCompatActivity {
     }
 
     public void post_feedback() {
-        StringRequest get_pawnshop_info = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                MDToast mdToast = MDToast.makeText(context, response, MDToast.LENGTH_SHORT, MDToast.TYPE_SUCCESS);
-                mdToast.show();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+        StringRequest get_pawnshop_info = new StringRequest(Request.Method.POST, url, response -> {
+            MDToast mdToast = MDToast.makeText(context, response, MDToast.LENGTH_SHORT, MDToast.TYPE_SUCCESS);
+            mdToast.show();
+        }, error -> {
 
-            }
         }) {
 
             protected Map<String, String> getParams() throws AuthFailureError {
@@ -547,33 +529,27 @@ public class RePawner_Profile extends AppCompatActivity {
     }
 
     private void get_repawner_review() {
-        StringRequest get_pawnshop_info = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
+        StringRequest get_pawnshop_info = new StringRequest(Request.Method.POST, url, response -> {
+            try {
 
-                    JSONObject result_object = new JSONObject(response);
-                    //extracting json array from response string
-                    JSONArray rep_feedback_array = result_object.getJSONArray("repawner_feedback");
-                    Log.e("jsondata", String.valueOf(rep_feedback_array));
-                    if (rep_feedback_array.length() > 0) {
-                        update_feedback = 1;
-                        JSONObject feedback_object = rep_feedback_array.getJSONObject(0);
-                        review_bar.setRating(feedback_object.getLong("Rating"));
-                        feedback_content.setText(feedback_object.getString("Feedback"));
-                        feedback_content.setTextColor(getResources().getColor(R.color.colorDGray));
-                    }
-
-                } catch (JSONException e1) {
-
-
+                JSONObject result_object = new JSONObject(response);
+                //extracting json array from response string
+                JSONArray rep_feedback_array = result_object.getJSONArray("repawner_feedback");
+                Log.e("jsondata", String.valueOf(rep_feedback_array));
+                if (rep_feedback_array.length() > 0) {
+                    update_feedback = 1;
+                    JSONObject feedback_object = rep_feedback_array.getJSONObject(0);
+                    review_bar.setRating(feedback_object.getLong("Rating"));
+                    feedback_content.setText(feedback_object.getString("Feedback"));
+                    feedback_content.setTextColor(getResources().getColor(R.color.colorDGray));
                 }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+
+            } catch (JSONException e1) {
+
 
             }
+        }, error -> {
+
         }) {
 
             protected Map<String, String> getParams() throws AuthFailureError {
@@ -588,21 +564,15 @@ public class RePawner_Profile extends AppCompatActivity {
     }
 
     private void check_if_following() {
-        StringRequest follow_status = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                if_follow = Integer.valueOf(response);
-                Log.e("follow", String.valueOf(if_follow));
-                if (if_follow == 1) {
-                    btn_follow.setVisibility(View.GONE);
-                    btn_unfollow.setVisibility(View.VISIBLE);
-                }
+        StringRequest follow_status = new StringRequest(Request.Method.POST, url, response -> {
+            if_follow = Integer.valueOf(response);
+            Log.e("follow", String.valueOf(if_follow));
+            if (if_follow == 1) {
+                btn_follow.setVisibility(View.GONE);
+                btn_unfollow.setVisibility(View.VISIBLE);
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+        }, error -> {
 
-            }
         }) {
 
             protected Map<String, String> getParams() throws AuthFailureError {
@@ -617,20 +587,14 @@ public class RePawner_Profile extends AppCompatActivity {
     }
 
     private void delete_feedback() {
-        StringRequest follow_status = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                MDToast.makeText(context, response, MDToast.LENGTH_LONG, MDToast.TYPE_SUCCESS).show();
-                finish();
-                overridePendingTransition(0, 0);
-                startActivity(getIntent());
-                overridePendingTransition(0, 0);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+        StringRequest follow_status = new StringRequest(Request.Method.POST, url, response -> {
+            MDToast.makeText(context, response, MDToast.LENGTH_LONG, MDToast.TYPE_SUCCESS).show();
+            finish();
+            overridePendingTransition(0, 0);
+            startActivity(getIntent());
+            overridePendingTransition(0, 0);
+        }, error -> {
 
-            }
         }) {
 
             protected Map<String, String> getParams() throws AuthFailureError {

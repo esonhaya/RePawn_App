@@ -12,20 +12,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.HorizontalScrollView;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
-
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
+import android.widget.*;
+import com.android.volley.*;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.systemscoreinc.repawn.IpConfig;
@@ -33,7 +21,6 @@ import com.example.systemscoreinc.repawn.R;
 import com.example.systemscoreinc.repawn.Session;
 import com.example.systemscoreinc.repawn.Utils;
 import com.valdesekamdem.library.mdtoast.MDToast;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,7 +33,8 @@ import java.util.List;
 import java.util.Map;
 
 public class AddPawned extends AppCompatActivity {
-    private EditText pname, pcat, pdesc, pprice;
+    private EditText pname, pdesc, pprice;
+    private AutoCompleteTextView pcat;
     private MaterialButton addbutton, catbutton;
     private RadioGroup preserve;
     private TextInputLayout pname_layout;
@@ -70,6 +58,7 @@ public class AddPawned extends AppCompatActivity {
     String Simage, Sreceipt;
     private Uri filePath;
     List<Category_List> clist = new ArrayList<>();
+   ArrayList<String> categories=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,52 +67,40 @@ public class AddPawned extends AppCompatActivity {
         context = this;
         session = new Session(this);
         rid = session.getID();
-        declaring_from_view();
-        get_categories();
         rq = Volley.newRequestQueue(context);
+        get_categories();
+        declaring_from_view();
+
 //        price = Float.valueOf(pprice.getText().toString());
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        addbutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                add_pawned();
-            }
-        });
+        addbutton.setOnClickListener(view -> add_pawned());
     }
 
     public void get_categories() {
-        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                JSONObject object = null;
-                try {
-                   object = new JSONObject(response);
-                    JSONArray item_array = object.getJSONArray("orders");
-                    if (item_array.length() > 0) {
-                        for (int i = 0; i < item_array.length(); i++) {
-                            //extracting json array from response string
-                            JSONObject item = item_array.getJSONObject(i);
-                            Category_List list = new Category_List(item.getInt("Category_ID"), item.getInt("Parent_ID"),
-                                    item.getString("Category_name"));
-                            clist.add(list);
-                        }
+        StringRequest request = new StringRequest(Request.Method.POST, url, response -> {
+            JSONObject object = null;
+            try {
+                object = new JSONObject(response);
+                JSONArray item_array = object.getJSONArray("categories");
+                if (item_array.length() > 0) {
+                    for (int i = 0; i < item_array.length(); i++) {
+                        //extracting json array from response string
+                        JSONObject item = item_array.getJSONObject(i);
+                        categories.add(item.getString("Category_name"));
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+        }, error -> {
 
-            }
         }) {
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+            protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
                 params.put("get_categories", "1");
                 return params;
@@ -172,24 +149,18 @@ public class AddPawned extends AppCompatActivity {
             } else {
                 Simage = imageToString(bimage);
                 Sreceipt = imageToString(breceipt);
-                StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        if (response.equals("1")) {
-                            pname_layout.setError("name's already been used");
-                            //   Toast.makeText(context, pid+"", Toast.LENGTH_SHORT).show();
-                        } else
-                            MDToast.makeText(context, "You've sucesfully added an item", MDToast.LENGTH_LONG, MDToast.TYPE_SUCCESS).show();
-                        Intent intent = new Intent(AddPawned.this, Pawned.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
-                        finish();
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
+                StringRequest request = new StringRequest(Request.Method.POST, url, response -> {
+                    if (response.equals("1")) {
+                        pname_layout.setError("name's already been used");
+                        //   Toast.makeText(context, pid+"", Toast.LENGTH_SHORT).show();
+                    } else
+                        MDToast.makeText(context, "You've sucesfully added an item", MDToast.LENGTH_LONG, MDToast.TYPE_SUCCESS).show();
+                    Intent intent = new Intent(AddPawned.this, Pawned.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    finish();
+                }, error -> {
 
-                    }
                 }) {
                     @Override
                     protected Map<String, String> getParams() throws AuthFailureError {
@@ -224,7 +195,7 @@ public class AddPawned extends AppCompatActivity {
         addbutton = this.findViewById(R.id.done_add);
         catbutton = this.findViewById(R.id.cat_button);
         pname = this.findViewById(R.id.pname_edit);
-        pcat = this.findViewById(R.id.cat_text);
+        pcat = this.findViewById(R.id.cat_edit);
         pdesc = this.findViewById(R.id.pdesc_edit);
         pprice = this.findViewById(R.id.pprice_edit);
         preserve = this.findViewById(R.id.p_reservable);
@@ -233,42 +204,12 @@ public class AddPawned extends AppCompatActivity {
         image = this.findViewById(R.id.product_image);
         receipt = this.findViewById(R.id.receipt_image);
         rl = this.findViewById(R.id.rl);
-        cat_button = this.findViewById(R.id.cat_button);
-        cat_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-//                builder.setTitle("Make your selection");
-//                builder.setItems(clist, new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int item) {
-//                        // Do something with the selection
-//                    }
-//                });
-//                AlertDialog alert = builder.create();
-//                alert.show();
-//                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-//                builder.setTitle("Make your selection");
-//                builder.setItems(clist, new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int item) {
-//                        // Do something with the selection
-//                    }
-//                });
-//                AlertDialog alert = builder.create();
-//                alert.show();
-            }
-        });
-        image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                pickImage(1);
-            }
-        });
-        receipt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                pickImage(2);
-            }
-        });
+///   String[] emails = getResources().getStringArray(R.array.emails_array);
+           ArrayAdapter<String> adapter;
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, categories);
+        pcat.setAdapter(adapter);
+        image.setOnClickListener(view -> pickImage(1));
+        receipt.setOnClickListener(view -> pickImage(2));
 
     }
 

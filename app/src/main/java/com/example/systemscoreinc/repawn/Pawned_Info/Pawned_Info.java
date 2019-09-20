@@ -1,7 +1,6 @@
 package com.example.systemscoreinc.repawn.Pawned_Info;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -17,12 +16,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
+import com.android.volley.*;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.systemscoreinc.repawn.Home.Items.Home_Items_Adapter;
@@ -33,7 +27,6 @@ import com.example.systemscoreinc.repawn.Session;
 import com.glide.slider.library.SliderLayout;
 import com.squareup.picasso.Picasso;
 import com.valdesekamdem.library.mdtoast.MDToast;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -142,20 +135,6 @@ public class Pawned_Info extends AppCompatActivity {
         extras = getIntent().getExtras();
         Intent i = getIntent();
         ItemList item = (ItemList) i.getSerializableExtra("item");
-//        item_name.setText(extras.getString("item_name"));
-//        item_price.append(""+extras.getLong("item_price"));
-//        item_desc.setText(extras.getString("item_desc"));
-//        seller_name.setText(Sseller_name);
-//        item_category.setText(Scat_name);
-//        seller_products.append(Sseller_name);
-//        Sseller_name = extras.getString("seller_name");
-//        Scat_name = extras.getString("cat_name");
-//        seller_id = extras.getInt("seller_id");
-//        item_type = extras.getString("item_type");
-//        item_id = extras.getInt("item_id");
-//        reservable = extras.getInt("reservable");
-//        image = extras.getString("image");
-//        image_id = extras.getInt("image_id");
         item_name.setText(item.getItem_name());
         item_price.append("" + item.getPrice());
         item_desc.setText(item.getItem_desc());
@@ -186,17 +165,10 @@ public class Pawned_Info extends AppCompatActivity {
             showAlert();
 
         } else {
-            StringRequest req = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    MDToast.makeText(context, response, MDToast.LENGTH_LONG, MDToast.TYPE_SUCCESS).show();
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
+            StringRequest req = new StringRequest(Request.Method.POST, url, response ->
+                    MDToast.makeText(context, response, MDToast.LENGTH_LONG, MDToast.TYPE_SUCCESS).show(), error -> {
 
-                }
-            }) {
+                    }) {
                 protected Map<String, String> getParams() throws AuthFailureError {
                     Map<String, String> params = new HashMap<>();
                     params.put("type", String.valueOf(type));
@@ -212,26 +184,20 @@ public class Pawned_Info extends AppCompatActivity {
     }
 
     public void check_requests() {
-        StringRequest req = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                if (response.equals("1")) {
-                    btn_order.setVisibility(View.GONE);
-                } else if (response.equals("12")) {
-                    btn_order.setVisibility(View.GONE);
-                    btn_reserve.setVisibility(View.GONE);
-                } else if (response.equals("2")) {
-                    btn_reserve.setVisibility(View.GONE);
-
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+        StringRequest req = new StringRequest(Request.Method.POST, url, response -> {
+            if (response.equals("1")) {
+                btn_order.setVisibility(View.GONE);
+            } else if (response.equals("12")) {
+                btn_order.setVisibility(View.GONE);
+                btn_reserve.setVisibility(View.GONE);
+            } else if (response.equals("2")) {
+                btn_reserve.setVisibility(View.GONE);
 
             }
+        }, error -> {
+
         }) {
-            protected Map<String, String> getParams() throws AuthFailureError {
+            protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
                 params.put("check_requests", "1");
                 params.put("Product_ID", String.valueOf(item_id));
@@ -248,44 +214,27 @@ public class Pawned_Info extends AppCompatActivity {
         int item_selected = 0;
         AlertDialog purdia = new AlertDialog.Builder(context, R.style.RePawnDialog)
                 .setTitle("How do you like to make the purchase?")
-                .setSingleChoiceItems(choices, item_selected, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int selectedIndex) {
-                        choice = selectedIndex;
-                    }
-                }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (choice == 1) {
-                            payment_type = "paypal";
-                        } else {
-                            payment_type = "manual";
-                        }
-                        add_request();
+                .setSingleChoiceItems(choices, item_selected, (dialogInterface, selectedIndex) ->
+                        choice = selectedIndex).setPositiveButton("OK", (dialog, which) -> {
+                            if (choice == 1) {
+                                payment_type = "paypal";
+                            } else {
+                                payment_type = "manual";
+                            }
+                            add_request();
 
-                    }
-                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+                        }).setNegativeButton("Cancel", (dialogInterface, i) -> {
 
-                    }
-                }).create();
+                        }).create();
         purdia.show();
     }
 
     private void add_request() {
-        StringRequest req = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                MDToast.makeText(context, response, MDToast.LENGTH_LONG, MDToast.TYPE_SUCCESS).show();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+        StringRequest req = new StringRequest(Request.Method.POST, url, response ->
+                MDToast.makeText(context, response, MDToast.LENGTH_LONG, MDToast.TYPE_SUCCESS).show(), error -> {
 
-            }
-        }) {
-            protected Map<String, String> getParams() throws AuthFailureError {
+                }) {
+            protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
                 params.put("type", String.valueOf(type));
                 params.put("reserder", "1");
@@ -316,44 +265,41 @@ public class Pawned_Info extends AppCompatActivity {
 
     private void populateviews() {
         Log.e("seller_id", String.valueOf(seller_id));
-        StringRequest get_seller_products = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
+        StringRequest get_seller_products = new StringRequest(Request.Method.POST, url, response -> {
+            try {
 
-                    JSONObject result_object = new JSONObject(response);
+                JSONObject result_object = new JSONObject(response);
 
-                    //extracting json array from response string
-                    JSONArray items_array = result_object.getJSONArray("seller_items");
-                    Log.e("jsondata", String.valueOf(items_array));
-                    if (items_array.length() > 0) {
-                        for (int i = 0; i < items_array.length(); i++) {
+                //extracting json array from response string
+                JSONArray items_array = result_object.getJSONArray("seller_items");
+                Log.e("jsondata", String.valueOf(items_array));
+                if (items_array.length() > 0) {
+                    for (int i = 0; i < items_array.length(); i++) {
 
-                            JSONObject items_object = items_array.getJSONObject(i);
-                            if (item_type.equals("pawned")) {
-                                ItemList item = new ItemList(items_object.getString("Product_name"),
-                                        items_object.getString("Date_Added"), items_object.getString("seller_name")
-                                        , items_object.getString("Category_name"), items_object.getString("Product_Type"),
-                                        items_object.getString("Product_image"), items_object.getString("Product_description")
-                                        , items_object.getInt("Promoted"), items_object.getInt("Reserved"), items_object.getInt("Ordered"), items_object.getInt("Product_ID"),
-                                        items_object.getInt("User_ID"), items_object.getInt("Reservable"), items_object.getInt("Image_ID"),
-                                        items_object.getLong("Product_price"));
-                                Sitemlist.add(item);
-                                if (i > 5) {
-                                    see_all_products.setVisibility(View.VISIBLE);
-                                }
+                        JSONObject items_object = items_array.getJSONObject(i);
+                        if (item_type.equals("pawned")) {
+                            ItemList item = new ItemList(items_object.getString("Product_name"),
+                                    items_object.getString("Date_Added"), items_object.getString("seller_name")
+                                    , items_object.getString("Category_name"), items_object.getString("Product_Type"),
+                                    items_object.getString("Product_image"), items_object.getString("Product_description")
+                                    , items_object.getInt("Promoted"), items_object.getInt("Reserved"), items_object.getInt("Ordered"), items_object.getInt("Product_ID"),
+                                    items_object.getInt("User_ID"), items_object.getInt("Reservable"), items_object.getInt("Image_ID"),
+                                    items_object.getLong("Product_price"));
+                            Sitemlist.add(item);
+                            if (i > 5) {
+                                see_all_products.setVisibility(View.VISIBLE);
                             }
-
-
                         }
-                        Sitems_adapter.notifyDataSetChanged();
-                    } else {
-                        seller_products_layout.setVisibility(View.GONE);
-                    }
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
+
+                    }
+                    Sitems_adapter.notifyDataSetChanged();
+                } else {
+                    seller_products_layout.setVisibility(View.GONE);
                 }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
         }, new Response.ErrorListener() {
             @Override
