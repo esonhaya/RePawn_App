@@ -1,11 +1,14 @@
 package com.example.systemscoreinc.repawn.Home;
 
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -37,7 +40,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.systemscoreinc.repawn.Home.Category.CategoryList;
 import com.example.systemscoreinc.repawn.Home.Category.Home_Cat_Adapter;
 import com.example.systemscoreinc.repawn.Home.Items.Home_Items_Adapter;
-import com.example.systemscoreinc.repawn.Home.Notifications.Notifications;
 import com.example.systemscoreinc.repawn.Home.Notifications.Notifications_List;
 import com.example.systemscoreinc.repawn.Home.Pawnshops.All_Pawnshops.All_Pawnshops;
 import com.example.systemscoreinc.repawn.Home.Pawnshops.Home_Pawnshops_Adapter;
@@ -95,6 +97,10 @@ public class Home_Navigation1 extends AppCompatActivity implements BaseSliderVie
     Bitmap largeIcon;
     PendingIntent pendingIntent;
     TextView notifView;
+    int notif_id = 1;
+    public static final String NOTIFICATION_CHANNEL_ID = "channel_id";
+    public static final int NOTIFICATION_ID = 101;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,7 +127,6 @@ public class Home_Navigation1 extends AppCompatActivity implements BaseSliderVie
         all_onclick();
         location_related();
         new_notif();
-        notify_all();
     }
 
     public void all_onclick() {
@@ -164,9 +169,10 @@ public class Home_Navigation1 extends AppCompatActivity implements BaseSliderVie
                             startActivity(to_prof);
                             break;
                         case R.id.nav_notif:
-                            Intent to_notif = new Intent(Home_Navigation1.this, Notifications.class);
-                            to_notif.putExtra("user_id", session.getID());
-                            startActivity(to_notif);
+//                            Intent to_notif = new Intent(Home_Navigation1.this, Notifications.class);
+//                            to_notif.putExtra("user_id", session.getID());
+//                            startActivity(to_notif);
+                            notification_sample();
                             break;
                         case R.id.nav_items:
                             startActivity(new Intent(Home_Navigation1.this, Pawned.class));
@@ -183,6 +189,18 @@ public class Home_Navigation1 extends AppCompatActivity implements BaseSliderVie
                 });
     }
 
+    private void notification_sample() {
+        Notification notification = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
+                .setContentTitle("This is the Title")
+                .setContentText("This is the sub text")
+                .setSmallIcon(R.drawable.ic_arrow_forward_black_24dp)
+                .setStyle(new NotificationCompat.BigPictureStyle()
+                        .bigPicture(BitmapFactory.decodeResource(getResources(), R.drawable.ic_arrow_forward_black_24dp)))
+                .build();
+        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
+        notificationManagerCompat.notify(NOTIFICATION_ID, notification);
+
+    }
 
     private void declarestuffs() {
         pawnshop_all = this.findViewById(R.id.pawnshop_all);
@@ -235,6 +253,10 @@ public class Home_Navigation1 extends AppCompatActivity implements BaseSliderVie
                         new_notif.add(notif);
                     }
                 }
+                Log.e("notif size", String.valueOf(new_notif.size()));
+                notifView.setText("" + new_notif.size());
+                Log.e("new notifications", String.valueOf(new_notif));
+                notify_all();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -248,50 +270,55 @@ public class Home_Navigation1 extends AppCompatActivity implements BaseSliderVie
             }
         };
         rq.add(preq);
-        Log.e("notif size", String.valueOf(new_notif.size()));
-        notifView.setText("" + new_notif.size());
+
 
     }
 
     private void notify_all() {
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         for (Notifications_List cur : new_notif) {
             // use currInstance
-
-            Target target = new Target() {
-                @Override
-                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                    largeIcon = bitmap;
-                }
-
-                @Override
-                public void onBitmapFailed(Exception e, Drawable errorDrawable) {
-
-                }
-
-                @Override
-                public void onPrepareLoad(Drawable placeHolderDrawable) {
-                }
-            };
+            Log.e("notification name", cur.getMessage());
             if (cur.getType() == 1) {
                 Intent notifyIntent = new Intent(this, RePawner_Profile.class);
                 notifyIntent.putExtra("user_id", cur.getLink_id());
                 notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                         | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                pendingIntent = PendingIntent.getActivity(
-                        this, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT
-                );
+                pendingIntent = PendingIntent.getActivity(this, notif_id, notifyIntent, 0);
             }
-            Picasso.get().load(cur.getNotif_image()).into(target);
-            NotificationCompat.Builder builder =
-                    new NotificationCompat.Builder(this, "chan")
-                            .setSmallIcon(R.mipmap.rp_launcher_round)
-                            .setContentTitle("RePawn")
-                            .setContentText(cur.getMessage())
-                            .setAutoCancel(true)
-                            .setLargeIcon(largeIcon)
-                            .setContentIntent(pendingIntent);
-            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-            notificationManager.notify(23, builder.build());
+
+            Picasso.get()
+                    .load(url)
+                    .into(new Target() {
+                        @Override
+                        public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
+                            /* Save the bitmap or do something with it here */
+
+                            //Set it in the ImageView
+                            largeIcon = bitmap;
+                        }
+
+                        @Override
+                        public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+
+                        }
+
+                        @Override
+                        public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                        }
+                    });
+            Notification n = new Notification.Builder(this)
+                    .setContentTitle("RePawn")
+                    .setContentText(cur.getMessage())
+                    .setSmallIcon(R.mipmap.rp_launcher_round)
+                    .setLargeIcon(largeIcon)
+                    .setContentIntent(pendingIntent).build();
+
+
+            notificationManager.notify(notif_id, n);
+            notif_id++;
         }
 
     }

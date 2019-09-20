@@ -86,6 +86,9 @@ public class Notifications extends AppCompatActivity {
     public void getNew_Notif(View rootView) {
 
     }
+    public void getOld_Notif(){
+        
+    }
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
